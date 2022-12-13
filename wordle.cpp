@@ -8,16 +8,20 @@
 #include "functions.cpp"
 using namespace std;
 
-
 int main() {
     //declaring main type variables
     int typ;
     char hid[6];
-    //opening message
-    cout << "Would you like to play indpendently (0) or interactively (1)?: ";
-    cin >> typ;
+    const int tot=12947+1;
+    char words[tot][6];
 
-    //main body for independent mode
+    read_words(tot, words);
+
+    //opening message
+    //cout << "Would you like to play indpendently (0) or interactively (1)?: ";
+    //cin >> typ;
+
+    /*//main body for independent mode
     if (typ == 0) 
     {
         printf("You have chosen to play independently.\nPlease enter a word for me to find: ");
@@ -39,17 +43,13 @@ int main() {
             printf("Please enter your starting word: ");
             scanf("%5s", hid);
 
-            //printf("%s %s\n", hid, &hid);
-
             interactive(hid);
         }
         else if (strt == 1)
         {
-            printf("The best starting word is: %s\n", best_start());
+            printf("The best starting word is: %s\n", best_start(words));
             printf("Is this ok? If so please re-enter this word: ");
             scanf("%5s", hid);
-
-            //printf("%s %s\n", hid[0], hid);
             
             interactive(hid);
         }
@@ -58,7 +58,7 @@ int main() {
     //error message
     else {
         cout << "Please enter a type which is either 0 or 1.\n";
-    }
+    }*/
 
     printf("Program ended.\n");
 }

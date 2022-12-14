@@ -7,18 +7,23 @@
 
 int main() {
     //declaring main type variables
-    const int tot=12947;
+    int tot=12947;
     int typ;
-    char words[tot][6];
-    char* hid;
+    string words[tot];
+    string hid;
 
-    int test = 0;
+    int test = 1;
+
+    //words[0] = "First string";
+    //cout << words[0] << endl;
+    //cout << words[0][0] << endl;
 
     read_words(tot, words);
-
-    printf("Best word to start with is: %s\n", best_start(tot, words));
-
-    if(test==1){
+    printf("The best word to start with is: ");
+    cout << best_start(tot, words) << endl;
+    
+    if(test==1)
+    {
 
     //opening message
     cout << "Welcome to my Wordle solver!\nWould you like to play indpendently (0) or interactively (1)?: ";
@@ -27,17 +32,17 @@ int main() {
     //main body for independent mode
     if (typ == 0) 
     {
-        printf("You have chosen to play independently.\nPlease enter a word for me to find: ");
-        scanf("%6s", hid);
-        //printf("%s\n", hid);
+        cout << "You have chosen to play independently.\nPlease enter a word for me to find: ";
+        cin >> hid;
+        //cout << hid << endl;
         
-        independent(hid);
+        independent(hid, tot, words);
     }
 
     //main body for interactive mode
     else if (typ == 1) 
     {
-        hid = words[(int)rand() % tot];
+        string best = best_start(tot, words);
         
         int strt;
         char start[6];
@@ -46,23 +51,23 @@ int main() {
 
         if (strt == 0)
         {
-            printf("Please enter your starting word: ");
-            scanf("%6s", start);
+            cout << "Please enter your starting word: ";
+            cin >> start;
 
-            interactive(start, hid);
+            interactive(start, tot, words);
         }
         else if (strt == 1)
         {
-            printf("The best starting word is: %s\n", best_start(tot, words));
-            printf("Is this ok? If so please re-enter this word: ");
-            scanf("%6s", start);
+            printf("The best starting word is: ");
+            cout << best << endl;
             
-            interactive(start, hid);
+            interactive(best, tot, words);
         }
     }
 
     //error message
-    else {
+    else 
+    {
         cout << "Please enter a type which is either 0 or 1.\n";
     }
 

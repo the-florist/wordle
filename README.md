@@ -1,0 +1,31 @@
+# Wordle solver #
+
+The purpose of this program is to solve the wordle, in both
+an independent and interactive format. In independent mode, the 
+user provides a word for the computer to guess, and the computer 
+will use (----- analysis) to guess the word. In interactive mode,
+the computer will generate a hidden word and the user will have to 
+guess the word. In this mode, the user can either supply their own 
+first word, or they can use a good first word recommended by the 
+computer.
+
+This program is written in three main sections. First the program sets 
+all of the variables and arrays that it will need at the start, and scans 
+in the complete list of acceptable wordle words. Then the program asks the 
+user which mode they would like to play in. Then the user will enter one 
+of two subroutines:
+
+1. Independent. Here, the user will first enter a word for the computer to 
+guess ---
+
+2. Interactive. Here, 
+
+## The "best start" function ##
+
+This function takes the list of all possible words and decides 
+which one is the best word to start the game off with. To do this, 
+it counts how many times each letter of the alphabet shows up in 
+each position of the word, and divides by the total number of words, 
+giving a rough "likelyhood" of each letter showing up in each location.
+
+The program then 

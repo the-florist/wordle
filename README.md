@@ -28,4 +28,8 @@ it counts how many times each letter of the alphabet shows up in
 each position of the word, and divides by the total number of words, 
 giving a rough "likelyhood" of each letter showing up in each location.
 
-The program then 
+The program then takes each word and adds up this probability value for 
+each letter which appears in the word. This total score is then used to 
+rank words for their "generality", i.e. the likelyhood that the letters 
+appearing in the word will appear in that place in a randomly generated 
+word. This word is then given as the best option to start with.

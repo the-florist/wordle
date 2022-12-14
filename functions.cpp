@@ -1,18 +1,24 @@
 #include "header.h"
 
-void independent(char* hidden) 
+void independent(string hidden, int total, string all_words[]) 
 {
-    printf("The word you have entered is: %s\n", hidden);
+    printf("Your hidden word is: \n");
+    cout << hidden << endl;
+
+
 }
 
-void interactive(char* starter, char* hidden)
+void interactive(string starter, int total, string all_words[])
 {
-    printf("The word you have entered is: %s\n", hidden);
+    string hidden = all_words[(int)rand() % total];
+
+    printf("The word you are starting with is: \n");
+    cout << starter << endl;
 }
 
-const char* best_start(int total, char all_words[][6])
+string best_start(int total, string all_words[])
 {
-    char alphabet[] = "abcdefghijklmnopqrstuvwxyz";
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
     float prob[26][6]; //first index is letter, second is position
     float score[total];
     int count = 0;
@@ -22,6 +28,7 @@ const char* best_start(int total, char all_words[][6])
         score[w] = 0.;
     }
 
+    //This loop calculates the probabilities for each letter of the alphabet as a function of word position.
     for (int a=0; a<26; a++) for (int l=0; l<6; l++) 
     {
         for (int w=0; w<total; w++) 
@@ -39,6 +46,7 @@ const char* best_start(int total, char all_words[][6])
         count = 0;
     }
 
+    //This calculates the total score for each word
     for (int w=0; w<total; w++) for (int l=0; l<6; l++) for (int a=0; a<26; a++) 
     {
 
@@ -53,6 +61,7 @@ const char* best_start(int total, char all_words[][6])
 
     }
 
+    //This calculates the maximum scoring word's index
     int max;
     for (int w=1; w<total; w++) 
     {
@@ -67,24 +76,34 @@ const char* best_start(int total, char all_words[][6])
     }
 
     //printf("Some scores: %f %f %f\n", score[0], score[460], score[1346]);
-    //printf("%s %s %s\n", all_words[total-1], all_words[total-2], all_words[total-3]);
-    //printf("The max score (index %i) is %f, and the best word is %s\n", max, score[max], all_words[max]);
+    //cout << all_words[0] << " " << all_words[total-1] << endl;
+    //printf("The max score (index %i) is %f, and the best word is:\n", max, score[max]);
+    //cout << all_words[max] << endl;
 
     return all_words[max];
 }
 
-void read_words(int total, char word_array[][6])
+void read_words(int total, string word_array[])
 {
+    char reads[total][6];
+
     FILE *wordfile;
     wordfile = fopen("WordleWords.txt","r");
 
     for (int i=0; i<total; i++)
     {
-        fscanf(wordfile, "%6s", word_array[i]);
+        fscanf(wordfile, "%6s", reads[i]);
+        word_array[i] = (string)reads[i];
     }
 
-    //fscanf(wordfile, "%s", word_array[0]);
-    //fscanf(wordfile, "%s", word_array[1]);
+    /*cout << word_array[0] << endl;
+    cout << word_array[10] << endl;
+    cout << word_array[10][0] << endl;
 
-    //printf("Some words: %s %s %s %s\n", word_array[0], word_array[1], word_array[2], word_array[3]);
+    if (word_array[0][0] == word_array[2][1]) {
+        printf("String equality works!\n");
+    }
+    else{
+        printf("Something went wrong...\n");
+    }*/
 }

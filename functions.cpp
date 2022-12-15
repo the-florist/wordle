@@ -1,12 +1,4 @@
-#include "header.h"
-
-void independent(string hidden, int total, string all_words[]) 
-{
-    printf("Your hidden word is: \n");
-    cout << hidden << endl;
-
-
-}
+#include "header.hpp"
 
 void interactive(string starter, int total, string all_words[])
 {
@@ -16,8 +8,52 @@ void interactive(string starter, int total, string all_words[])
     cout << starter << endl;
 }
 
-string best_start(int total, string all_words[])
+int nth_best(int tot_words, float scores[], int place) 
 {
+    int counter = 0;
+    int max = 0;
+    float scores_rm[tot_words];
+
+    for(int w=1; w<tot_words; w++) 
+    {
+        scores_rm[w] = scores[w];
+    }
+    
+    while (counter<place)
+    {
+        for (int w=1; w<tot_words; w++) 
+        {
+            if (scores_rm[w] > scores_rm[max])
+            {
+                max = w;
+            }
+            else 
+            {
+                continue;
+            }
+        }
+
+        scores_rm[max] = 0.;
+        counter++;
+    }
+
+    //cout << "nth max index is: " << max << endl;
+    return max;
+}
+
+string best_word(int total, string all_words[], int nth)
+{
+    /*********
+    Entry key:
+    1. Total number of words accepted by the game (default is 12947)
+    2. An array containing all of these words in string format
+    3. The nth best word you would like (i.e. first best, second best, etc.)
+    This function calculates the scores array which is used with the nth_best
+         function to determine the nth-best word.
+    **********/
+
+    int check_scores = 1;
+    
     string alphabet = "abcdefghijklmnopqrstuvwxyz";
     float prob[26][6]; //first index is letter, second is position
     float score[total];
@@ -61,26 +97,7 @@ string best_start(int total, string all_words[])
 
     }
 
-    //This calculates the maximum scoring word's index
-    int max;
-    for (int w=1; w<total; w++) 
-    {
-        if (score[w] > score[w-1])
-        {
-            max = w;
-        }
-        else 
-        {
-            continue;
-        }
-    }
-
-    //printf("Some scores: %f %f %f\n", score[0], score[460], score[1346]);
-    //cout << all_words[0] << " " << all_words[total-1] << endl;
-    //printf("The max score (index %i) is %f, and the best word is:\n", max, score[max]);
-    //cout << all_words[max] << endl;
-
-    return all_words[max];
+    return all_words[nth_best(total, score, nth)];
 }
 
 void read_words(int total, string word_array[])
@@ -95,15 +112,12 @@ void read_words(int total, string word_array[])
         fscanf(wordfile, "%6s", reads[i]);
         word_array[i] = (string)reads[i];
     }
+}
 
-    /*cout << word_array[0] << endl;
-    cout << word_array[10] << endl;
-    cout << word_array[10][0] << endl;
+void independent(string hidden, int total, string all_words[]) 
+{
+    printf("Your hidden word is: \n");
+    cout << hidden << endl;
 
-    if (word_array[0][0] == word_array[2][1]) {
-        printf("String equality works!\n");
-    }
-    else{
-        printf("Something went wrong...\n");
-    }*/
+
 }

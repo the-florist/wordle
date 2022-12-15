@@ -2,7 +2,7 @@
 //Created December 2022 by Ericka Florio
 //For the purpose of assessment in the Michaelmas 2022 Research in Computing course.
 
-#include "header.h"
+#include "header.hpp"
 #include "functions.cpp"
 
 int main() {
@@ -14,13 +14,10 @@ int main() {
 
     int test = 1;
 
-    //words[0] = "First string";
-    //cout << words[0] << endl;
-    //cout << words[0][0] << endl;
-
     read_words(tot, words);
-    printf("The best word to start with is: ");
-    cout << best_start(tot, words) << endl;
+    
+    /*cout << "The first three best words are: ";
+    cout << best_word(tot, words, 1) << " " << best_word(tot, words, 2) << " " << best_word(tot, words, 3) << endl;*/
     
     if(test==1)
     {
@@ -42,7 +39,7 @@ int main() {
     //main body for interactive mode
     else if (typ == 1) 
     {
-        string best = best_start(tot, words);
+        string best = best_word(tot, words, 1);
         
         int strt;
         char start[6];

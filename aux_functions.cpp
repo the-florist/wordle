@@ -86,6 +86,10 @@ string best_word(int total, string all_words[], int nth)
         {
             score[w] += prob[a][l];
         }
+        else if (all_words[w] == "")
+        {
+            score[w] = 0;
+        }
         else 
         {
             continue;
@@ -114,7 +118,7 @@ void read_words(int total, string word_array[])
     }
 }
 
-void narrow_down() 
+void narrow_down(int total, string all_words[]) 
 {
     /*What this function should do:
     1. figure out which of the letters appear
@@ -124,4 +128,89 @@ void narrow_down()
     4. compare the strings to determine how many letters are correct/appear
     5. if the strings are equal, exit. If not, repeat the process.
     */
+
+   string guess_word = "store";
+   string hidden_word = "stout";
+   string temp = "00000";
+
+   //This makes the string with position dependence
+   for (int l=0; l<6; l++)
+    {
+        if (guess_word[l] == hidden_word[l])
+        {
+            temp[l] = guess_word[l];
+        }
+        else 
+        {
+            continue;
+        }
+    }
+
+    cout << temp << endl;
+    cout << temp[0] << temp[1] << endl;
+
+    //This writes all letters from the guess word which also appear in the hidden word
+    string in_word = "";
+    int l = 0;
+    while (l < 6)
+    {
+        for (int lt=0; lt<l; lt++)
+        {
+            if (guess_word[l] == guess_word[lt])
+            {
+                l++;
+                break;
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+
+        for (int lh=0; lh<6; lh++)
+        {
+            if (guess_word[l] == hidden_word[lh])
+            {
+                in_word += guess_word[l];
+            }
+            else
+            {
+                continue;
+            }
+        }
+        l++;
+    }
+
+    cout << in_word << endl;
+
+    string new_guesses[total];
+    string zero = "0";
+    for (int i=0; i<total; i++){
+        new_guesses[i] = "";
+    }
+    
+    for (int w=0; w<total; w++) for (int l=0; l<5; l++)
+    {
+        int count = 0;
+
+        if (temp[l] != zero[0] && temp[l] == all_words[w][l] && count == 0){
+            new_guesses[w] = all_words[w];
+            count++;
+        }
+
+        else if (temp[l] != zero[0] && temp[l] != all_words[w][l]) {
+            new_guesses[w] = "";
+            break;
+        }
+
+        else 
+        {
+            continue;
+        }
+    }
+
+    cout << "The next best guess is: ";
+    cout << best_word(total, new_guesses, 1) << endl;
+    
 }

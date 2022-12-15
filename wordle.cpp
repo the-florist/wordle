@@ -13,9 +13,11 @@ int main() {
     string hid;
     string ans;
 
-    int test = 1;
+    int test = 0;
 
     read_words(tot, words);
+
+    narrow_down(tot, words);
     
     /*cout << "The first three best words are: ";
     cout << best_word(tot, words, 1) << " " << best_word(tot, words, 2) << " " << best_word(tot, words, 3) << endl;*/

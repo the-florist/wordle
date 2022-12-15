@@ -12,8 +12,8 @@ void interactive(string starter, int total, string all_words[])
 string independent(string hidden, int total, string all_words[]) 
 {
     string guess = best_word(total, all_words, 1);
-    string answer = "00000";
-    
+    string answer;
+
     for (int l=0; l<6; l++)
     {
         if (guess[l] == hidden[l])
@@ -26,9 +26,9 @@ string independent(string hidden, int total, string all_words[])
         }
     }
 
-    if (answer == hidden) //if computer guesses the hidden word right off
+    if (guess == hidden) //if computer guesses the hidden word right off
     {
-        return answer;
+        return guess;
     }
 
     else if (answer != "00000") //if the computer gets some letters right

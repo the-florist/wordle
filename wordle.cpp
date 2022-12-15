@@ -11,6 +11,7 @@ int main() {
     int typ;
     string words[tot];
     string hid;
+    string ans;
 
     int test = 1;
 
@@ -33,7 +34,10 @@ int main() {
         cin >> hid;
         //cout << hid << endl;
         
-        independent(hid, tot, words);
+        ans = independent(hid, tot, words);
+
+        cout << "Is this your hidden word?: ";
+        cout << ans << endl;
     }
 
     //main body for interactive mode

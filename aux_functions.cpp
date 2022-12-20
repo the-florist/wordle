@@ -1,5 +1,21 @@
 #include "header.hpp"
 
+void print_string_list(string strings[], int len, string name) //This is just a nice debugging routine
+{
+    cout << "String list " << name << ": " << endl;
+    for(int g=0; g<len; g++)
+    {
+        if (strings[g] != "")
+        {
+            cout << strings[g] << endl;
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
 int nth_best(int tot_words, float scores[], int place) 
 {
     /*
@@ -97,7 +113,9 @@ string best_word(int total, string all_words[], int nth)
 
     }
 
-    return all_words[nth_best(total, score, nth)];
+    int best_index = nth_best(total, score, nth);
+    //cout << "Score: " << score[best_index] << endl;
+    return all_words[best_index];
 }
 
 void read_words(int total, string word_array[])
@@ -118,9 +136,9 @@ void read_words(int total, string word_array[])
     }
 }
 
-void narrow_down(int total, string all_words[]) 
+string narrow_down(string guess_word, string hidden_word, string prev_guesses[], int prev_guess_len, int total, string all_words[]) 
 {
-    /*What this function should do:
+    /*What this function does:
     1. figure out which of the letters appear
     2. generate a new guess list based on which letters are right
         and which do appear
@@ -129,11 +147,9 @@ void narrow_down(int total, string all_words[])
     5. if the strings are equal, exit. If not, repeat the process.
     */
 
-   string guess_word = "store";
-   string hidden_word = "stout";
    string temp = "00000";
 
-   //This makes the string with position dependence
+   //Adds letters in the correct position to temp
    for (int l=0; l<6; l++)
     {
         if (guess_word[l] == hidden_word[l])
@@ -146,19 +162,17 @@ void narrow_down(int total, string all_words[])
         }
     }
 
-    cout << temp << endl;
-    cout << temp[0] << temp[1] << endl;
-
-    //This writes all letters from the guess word which also appear in the hidden word
+    //Writes all letters from the guess word which also appear in the hidden word to in_word
     string in_word = "";
-    int l = 0;
-    while (l < 6)
+    int let = 0;
+    while (let < 6)
     {
-        for (int lt=0; lt<l; lt++)
+        //Deals with doubled letters
+        for (int lt=0; lt<let; lt++)
         {
-            if (guess_word[l] == guess_word[lt])
+            if (guess_word[let] == guess_word[lt])
             {
-                l++;
+                let++;
                 break;
             }
 
@@ -168,49 +182,156 @@ void narrow_down(int total, string all_words[])
             }
         }
 
+        //Removes letters that are already accounted for in temp
         for (int lh=0; lh<6; lh++)
         {
-            if (guess_word[l] == hidden_word[lh])
+            if (guess_word[let] == temp[lh])
             {
-                in_word += guess_word[l];
+                continue;
+            }
+            else if (guess_word[let] == hidden_word[lh])
+            {
+                in_word += guess_word[let];
             }
             else
             {
                 continue;
             }
         }
-        l++;
+        let++;
     }
 
-    cout << in_word << endl;
 
-    string new_guesses[total];
+    string new_guesses[total]; //candidates
+    string position_guesses[total];
     string zero = "0";
     for (int i=0; i<total; i++){
         new_guesses[i] = "";
+        position_guesses[i] = "";
     }
-    
-    for (int w=0; w<total; w++) for (int l=0; l<5; l++)
+
+    //This runs if none of the letters in the guess are in the right position
+    if (temp == "00000")
     {
-        int count = 0;
-
-        if (temp[l] != zero[0] && temp[l] == all_words[w][l] && count == 0){
-            new_guesses[w] = all_words[w];
-            count++;
-        }
-
-        else if (temp[l] != zero[0] && temp[l] != all_words[w][l]) {
-            new_guesses[w] = "";
-            break;
-        }
-
-        else 
+        for (int w=0; w<total; w++)
         {
-            continue;
+            int count = 0;
+            for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
+            {
+                if (in_word[ll] == all_words[w][l]) 
+                {
+                    count++;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            if (all_words[w] == guess_word)
+            {
+                new_guesses[w] = "";
+            }
+            else if (count == in_word.length())
+            {
+                new_guesses[w] = all_words[w];
+            }
+            else 
+            {
+                new_guesses[w] = "";
+            }
+
+            //This removes all previous guesses from the candidate array
+            for(int g=0; g<prev_guess_len; g++)
+            {
+                if (all_words[w] == prev_guesses[g])
+                {
+                    new_guesses[w] = "";
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+
+    }
+    
+    //This runs if some letters in the guess are in the right position
+    else 
+    {
+        //This deals with doubled letters
+        for (int w=0; w<total; w++) for (int l=0; l<5; l++)
+        {
+            int count = 0;
+            if (temp[l] != zero[0] && temp[l] == all_words[w][l] && count == 0){
+                position_guesses[w] = all_words[w];
+                count++;
+            }
+
+            else if (temp[l] != zero[0] && temp[l] != all_words[w][l]) {
+                position_guesses[w] = "";
+                break;
+            }
+
+            else 
+            {
+                continue;
+            }
+        }
+
+        //This adds to candidate array
+        for (int w=0; w<total; w++)
+        {
+            if (position_guesses[w] != "")
+            {
+                int count = 0;
+                for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
+                {
+                    if (temp[l] == zero[0] && position_guesses[w][l] == in_word[ll]) 
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (position_guesses[w] == guess_word)
+                {
+                    new_guesses[w] = "";
+                }
+                else if (count == in_word.length())
+                {
+                    new_guesses[w] = position_guesses[w];
+                }
+                else 
+                {
+                    new_guesses[w] = "";
+                }
+
+                for(int g=0; g<prev_guess_len; g++)
+                {
+                    if (position_guesses[w] == prev_guesses[g])
+                    {
+                        new_guesses[w] = "";
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            else
+            {
+                continue;
+            }
         }
     }
 
-    cout << "The next best guess is: ";
-    cout << best_word(total, new_guesses, 1) << endl;
-    
+    //This finds the next best word to guess from the candidates, using the best_word function
+    string best_new_word = best_word(total, new_guesses, 1);
+    return best_new_word;
 }

@@ -13,11 +13,14 @@ int main() {
     string hid;
     string ans;
 
-    int test = 0;
+    int test = 1;
 
     read_words(tot, words);
 
-    narrow_down(tot, words);
+    //narrow_down(tot, words);
+    //hid = "stick";
+    //ans = independent(hid, tot, words);
+    //cout << "Is this your word?: " << ans << endl;
     
     /*cout << "The first three best words are: ";
     cout << best_word(tot, words, 1) << " " << best_word(tot, words, 2) << " " << best_word(tot, words, 3) << endl;*/
@@ -32,13 +35,16 @@ int main() {
     //main body for independent mode
     if (typ == 0) 
     {
+        int max;
         cout << "You have chosen to play independently.\nPlease enter a word for me to find: ";
         cin >> hid;
-        //cout << hid << endl;
-        
-        ans = independent(hid, tot, words);
 
-        cout << "Is this your hidden word?: ";
+        cout << "Please enter a maximum number of times you want me to guess: ";
+        cin >> max;
+        
+        ans = independent(hid, max, tot, words);
+
+        cout << "Your hidden word is: ";
         cout << ans << endl;
     }
 
@@ -76,5 +82,5 @@ int main() {
 
     }
 
-    printf("Program ended.\n");
+    printf("Program ended. Thanks for playing!\n");
 }

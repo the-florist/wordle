@@ -9,42 +9,43 @@ void interactive(string starter, int total, string all_words[])
 }
 
 
-string independent(string hidden, int total, string all_words[]) 
+string independent(string hidden, int max_guesses, int total, string all_words[]) 
 {
     string guess = best_word(total, all_words, 1);
-    string answer;
 
-    for (int l=0; l<6; l++)
-    {
-        if (guess[l] == hidden[l])
-        {
-            answer[l] = guess[l];
-        }
-        else 
-        {
-            continue;
-        }
-    }
-
-    if (guess == hidden) //if computer guesses the hidden word right off
+    //if computer guesses the hidden word right off
+    if (guess == hidden)
     {
         return guess;
     }
 
-    else if (answer != "00000") //if the computer gets some letters right
+    //if the computer needs to do some work
+    else
     {
-        //narrow_down();
+        int round_count = 0;
+        string temp_guess;
+        string previous[max_guesses];
 
-        return "else if";
-    }
-
-    else //if all the letters are wrong
-    {
-        /*until (keep_guessing() != "00000")
+        for (int g=0; g<max_guesses; g++) 
         {
-            guess = keep_guessing();
-        }*/
-        return "else";
-    }
+            previous[g] = "";
+        }
 
+        while (guess != hidden)
+        {
+            previous[round_count] = guess;
+            temp_guess = narrow_down(guess, hidden, previous, max_guesses, total, all_words);
+            guess = temp_guess;
+            round_count++;
+
+            if(round_count >= max_guesses) 
+            {
+                printf("Round count has exceeded ability for computer to remember past guesses. Exiting program.\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        cout << "Number of rounds: " << round_count << endl;
+        return guess;
+    }
 }

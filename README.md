@@ -33,3 +33,8 @@ each letter which appears in the word. This total score is then used to
 rank words for their "generality", i.e. the likelyhood that the letters 
 appearing in the word will appear in that place in a randomly generated 
 word. This word is then given as the best option to start with.
+
+IMPORTANT: This function ranks words based on how common their individual 
+letters are, *not* how common the word itself is. I don't currently have 
+the data to add this feature but I suspect it would improve the accuracy 
+of the ranking algorithm significantly.

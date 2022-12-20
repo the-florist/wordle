@@ -16,6 +16,22 @@ void print_string_list(string strings[], int len, string name) //This is just a 
     }
 }
 
+//Prints all the letters that have been eliminated so far
+void print_position_complement(string pos_comp) 
+{
+    string zero = "0";
+    cout << "These letters have been eliminated: ";
+    for (int i=0; i<pos_comp.length(); i++){
+        if (pos_comp[i] != zero[0]){
+            cout << pos_comp[i];
+        }
+        else {
+            continue;
+        }
+    }
+    printf("\n");
+}
+
 void read_words(int total, string word_array[])
 {
     /*
@@ -45,6 +61,26 @@ string letters_in_position(string guess_word, string hidden_word)
         if (guess_word[l] == hidden_word[l])
         {
             temp[l] = guess_word[l];
+        }
+        else 
+        {
+            continue;
+        }
+    }
+
+    return temp;
+}
+
+string letters_in_position_comp(string guess_word, string hidden_word) 
+{
+    string temp;
+
+   //Adds letters in the correct position to temp
+   for (int l=0; l<6; l++)
+    {
+        if (guess_word[l] != hidden_word[l])
+        {
+            temp += guess_word[l];
         }
         else 
         {
@@ -99,6 +135,41 @@ string letters_elsewhere(string guess_word, string hidden_word, string temp)
     return in_word;
 }
 
+//This works - it eliminates words from the guess list if their letters have been ruled out.
+string eliminated_letter_remover(string let, string let_comp, string next_guess, int pos_bool) 
+{
+    if (pos_bool == 0)
+    {
+        for (int l=0; l<5; l++) for (int ll=0; ll<let_comp.length(); ll++)
+        {
+            if (next_guess[l] == let_comp[ll]) 
+            {
+                next_guess = "";
+            }
+            else 
+            {
+                continue;
+            }
+        }
+    }
+    else 
+    {
+        for (int l=0; l<5; l++) for (int ll=0; ll<let_comp.length(); ll++)
+        {
+            if (next_guess[l] == let_comp[ll] && let[l] != let_comp[ll]) 
+            {
+                next_guess = "";
+            }
+            else 
+            {
+                continue;
+            }
+        }
+    }
+
+    return next_guess;
+}
+
 //This is fine
 string prev_guess_remover_no_position(int prev_guess_len, string prev_guesses[], string this_guess, string word_from_array)
 {
@@ -121,7 +192,7 @@ string prev_guess_remover_no_position(int prev_guess_len, string prev_guesses[],
 
 //This is fine
 //************
-string new_guess_array_no_position(string word_from_array, string in_word, string guess_word, string previous[], int previous_len) 
+string new_guess_array_no_position(string word_from_array, string in_word, string guess_word, string temp_comp, string previous[], int previous_len) 
 {
     string new_guess = ""; //candidate
     string in_word_temp = in_word;
@@ -155,6 +226,18 @@ string new_guess_array_no_position(string word_from_array, string in_word, strin
     }
 
     new_guess = prev_guess_remover_no_position(previous_len, previous, new_guess, word_from_array);
+
+    /*if (new_guess != "") 
+    {
+        cout << "Condition 2: " << new_guess << endl;
+    }*/
+
+    new_guess = eliminated_letter_remover("00000", temp_comp, new_guess, 0);
+
+    if (new_guess != "") 
+    {
+        cout << "Condition 3: " << new_guess << endl;
+    }
 
     return new_guess;
 }
@@ -208,7 +291,7 @@ string prev_guess_remover(int prev_guess_len, string prev_guesses[], string this
 
 //This runs fine and fast now!
 //***************
-string new_guess_array(int total, string word_from_array, string guess_word, string temp, string in_word, string position_guess, string previous[], int previous_len) 
+string new_guess_array(int total, string word_from_array, string guess_word, string temp, string temp_comp, string in_word, string position_guess, string previous[], int previous_len) 
 {
     string new_guess = ""; //candidates
     string in_word_temp = in_word;
@@ -245,6 +328,7 @@ string new_guess_array(int total, string word_from_array, string guess_word, str
         }
 
         new_guess = prev_guess_remover(previous_len, previous, new_guess, position_guess);
+        new_guess = eliminated_letter_remover(temp, temp_comp, new_guess, 1);
     }
 
     return new_guess;

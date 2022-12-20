@@ -13,8 +13,9 @@ void interactive(string start_word, int total, string all_words[])
     5. take a new starting word from the user and repeat the process.
     */
     
-    srand(time(NULL));
-    string hidden = all_words[(int)rand() % total];
+    //srand(time(NULL));
+    //string hidden = all_words[(int)rand() % total];
+    string hidden = "quilt";
 
     int max_guess_num = 100;
     int round = 0;
@@ -35,6 +36,7 @@ void interactive(string start_word, int total, string all_words[])
     {
         string guess = start_word;
         string position;
+        string position_complement;
         string in_word = "";
         int num_suggestions = 5;
 
@@ -43,6 +45,10 @@ void interactive(string start_word, int total, string all_words[])
             string new_guesses[total];
 
             position = letters_in_position(guess, hidden);
+            position_complement += letters_in_position_comp(guess, hidden);
+
+            cout << "Compliment: " << position_complement << endl;
+
             if (position != "00000") 
             {
                 cout << "These letters are in the right position: " << position << endl;
@@ -65,8 +71,11 @@ void interactive(string start_word, int total, string all_words[])
             {
                 for (int w=0; w<total; w++)
                 {
-                    new_guesses[w] = new_guess_array_no_position(all_words[w], in_word, guess, previous_guesses, max_guess_num);
+                    new_guesses[w] = new_guess_array_no_position(all_words[w], in_word, guess, position_complement, previous_guesses, max_guess_num);
                 }
+
+                //print_string_list(new_guesses, total, "new guesses 00000");
+                print_position_complement(position_complement);
 
                 cout << "The next " << num_suggestions << " best words to try are: " << endl;
                 for (int s=1; s<num_suggestions+1; s++) 
@@ -79,7 +88,7 @@ void interactive(string start_word, int total, string all_words[])
             {
                 for (int w=0; w<total; w++) 
                 {
-                    new_guesses[w] = new_guess_array(total, all_words[w], guess, position, in_word, make_position_guesses(w, all_words, position), previous_guesses, max_guess_num);
+                    new_guesses[w] = new_guess_array(total, all_words[w], guess, position, position_complement, in_word, make_position_guesses(w, all_words, position), previous_guesses, max_guess_num);
                 }
 
                 cout << "The next " << num_suggestions << " best words to try are: " << endl;

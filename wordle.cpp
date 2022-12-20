@@ -13,7 +13,7 @@ int main() {
     string hid;
     string ans;
 
-    int test = 1;
+    int test = 0;
 
     read_words(tot, words);
 
@@ -24,7 +24,8 @@ int main() {
     //cout << "Is this your word?: " << ans << endl;
 
     //Interactive test block
-    //string start = "clues";
+    string start = "sores";
+    //cout << "Guess: " << start << endl;
 
     /*string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);
@@ -44,6 +45,9 @@ int main() {
     }
     
     print_string_list(new_guesses, tot, "new guesses");*/
+    //cout << eliminated_letter_remover(start, guess) << endl;
+    //cout << letters_in_position_comp("cores", "cutes") << endl;
+    cout << eliminated_letter_remover("00000", "sorespalay", "quilt", 0) << endl;
 
     //interactive(start, tot, words);
     

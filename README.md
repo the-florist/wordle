@@ -40,6 +40,6 @@ the data to add this feature but I suspect it would improve the accuracy
 of the ranking algorithm significantly.
 
 To-dos:
-1. put something in best_word to take into account letters that have been crossed out
 2. make sure this words for both independent and interactive mode
+    To make this work: need to addess the case where temp is empty but in_word is not!
 3. (new branch) put the new subroutines into the independent function

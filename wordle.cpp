@@ -13,17 +13,20 @@ int main() {
     string hid;
     string ans;
 
-    int test = 0;
+    int test = 1;
 
     read_words(tot, words);
 
+    //Independent test block
     //narrow_down(tot, words);
     //hid = "stick";
     //ans = independent(hid, tot, words);
     //cout << "Is this your word?: " << ans << endl;
 
-    string start = "harls";
-    string temp = letters_in_position(start, "helps");
+    //Interactive test block
+    //string start = "clues";
+
+    /*string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);
     cout << temp << endl;
     cout << float_lets << endl;
@@ -36,11 +39,11 @@ int main() {
     for (int w=0; w<tot; w++)
     {
         new_guesses[w] = "";
-        new_guesses[w] = new_guess_array_correct_letters(w, tot, words, start, temp, float_lets, previous_guesses, previous_guesses_len);
+        new_guesses[w] = new_guess_array(tot, words[w], start, temp, float_lets, make_position_guesses(w, words, temp), previous_guesses, previous_guesses_len);
         //new_guesses[w] = new_guess_array(words[w], float_lets, start, previous_guesses, previous_guesses_len);
     }
     
-    print_string_list(new_guesses, tot, "new guesses");
+    print_string_list(new_guesses, tot, "new guesses");*/
 
     //interactive(start, tot, words);
     

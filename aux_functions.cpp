@@ -121,15 +121,18 @@ string prev_guess_remover_no_position(int prev_guess_len, string prev_guesses[],
 
 //This is fine
 //************
-string new_guess_array(string word_from_array, string in_word, string guess_word, string previous[], int previous_len) 
+string new_guess_array_no_position(string word_from_array, string in_word, string guess_word, string previous[], int previous_len) 
 {
     string new_guess = ""; //candidate
+    string in_word_temp = in_word;
+    string zero = "0";
 
     int count = 0;
     for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
     {
-        if (in_word[ll] == word_from_array[l]) 
+        if (in_word_temp[ll] == word_from_array[l]) 
         {
+            in_word_temp[ll] = zero[0];
             count++;
         }
         else
@@ -203,31 +206,23 @@ string prev_guess_remover(int prev_guess_len, string prev_guesses[], string this
     return this_guess;
 }
 
-//This works too!
+//This runs fine and fast now!
 //***************
-string new_guess_array_correct_letters(int word, int total, string all_words[], string guess_word, string temp, string in_word, string previous[], int previous_len) 
+string new_guess_array(int total, string word_from_array, string guess_word, string temp, string in_word, string position_guess, string previous[], int previous_len) 
 {
     string new_guess = ""; //candidates
-    string position_guesses[total];
+    string in_word_temp = in_word;
     string zero = "0";
-    for (int i=0; i<total; i++){
-        position_guesses[i] = "";
-    }
-
-    //This deals with doubled letters
-    for (int w=0; w<total; w++)
-    {
-        position_guesses[w] = make_position_guesses(w, all_words, temp);
-    }
 
     //This adds to candidate array
-    if (position_guesses[word] != "")
+    if (position_guess != "")
     {
         int count = 0;
         for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
         {
-            if (temp[l] == zero[0] && position_guesses[word][l] == in_word[ll]) 
+            if (temp[l] == zero[0] && position_guess[l] == in_word_temp[ll]) 
             {
+                in_word_temp[ll] = zero[0];
                 count++;
             }
             else
@@ -236,42 +231,24 @@ string new_guess_array_correct_letters(int word, int total, string all_words[], 
             }
         }
 
-        if (position_guesses[word] == guess_word)
+        if (position_guess == guess_word)
         {
             new_guess = "";
         }
         else if (count == in_word.length())
         {
-            new_guess = position_guesses[word];
+            new_guess = position_guess;
         }
         else 
         {
             new_guess = "";
         }
 
-        new_guess = prev_guess_remover(previous_len, previous, new_guess, position_guesses[word]);
+        new_guess = prev_guess_remover(previous_len, previous, new_guess, position_guess);
     }
 
     return new_guess;
 }
-
-/*string prev_guess_remover(string word_array, int total, string new_guesses[], string prev_guesses[], int prev_guess_len) //FIXME
-{
-    //This removes all previous guesses from the candidate array
-    for (int w=0; w<total; w++) for(int g=0; g<prev_guess_len; g++)
-    {
-        if (word_array[w] == prev_guesses[g])
-        {
-            new_guesses[w] = "";
-        }
-        else
-        {
-            continue;
-        }
-    }
-
-    return "loading";
-}*/
 
 int nth_best(int tot_words, float scores[], int place) 
 {

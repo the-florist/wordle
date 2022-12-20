@@ -40,7 +40,6 @@ the data to add this feature but I suspect it would improve the accuracy
 of the ranking algorithm significantly.
 
 To-dos:
-1. put two new guess array generators into functions file
-2. test these out to make sure they work here
-3. finish the interactive function
-4. (new branch) put the new subroutines into the independent function
+1. put something in best_word to take into account letters that have been crossed out
+2. make sure this words for both independent and interactive mode
+3. (new branch) put the new subroutines into the independent function

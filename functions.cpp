@@ -1,6 +1,6 @@
 #include "aux_functions.cpp"
 
-string interactive(string start_word, int total, string all_words[])
+void interactive(string start_word, int total, string all_words[])
 {
     /*
     This program should:
@@ -13,13 +13,22 @@ string interactive(string start_word, int total, string all_words[])
     5. take a new starting word from the user and repeat the process.
     */
     
+    srand(time(NULL));
     string hidden = all_words[(int)rand() % total];
+
+    int max_guess_num = 100;
+    int round = 0;
+    string previous_guesses[max_guess_num];
+    for (int g=0; g<max_guess_num; g++) 
+    {
+        previous_guesses[g] = "";
+    }
+
     cout << "Hidden word: " << hidden << endl; //This is just for debugging purposes, obviously
 
     if (start_word == hidden)
     {
         cout << "Congrats! You got the wordle in one go!" << endl;
-        return start_word;
     }
 
     else 
@@ -27,23 +36,73 @@ string interactive(string start_word, int total, string all_words[])
         string guess = start_word;
         string position;
         string in_word = "";
+        int num_suggestions = 5;
 
-        position = letters_in_position(guess, hidden);
-        cout << "These letters are in the right position: " << position << endl;
-
-        in_word = letters_elsewhere(guess, hidden, position);
-        cout << "These letters are in the word, but not in the right position: " << in_word << endl;
-
-        if (position == "00000")
+        while (guess != hidden) 
         {
             string new_guesses[total];
-            for (int w=0; w<total; w++)
+
+            position = letters_in_position(guess, hidden);
+            if (position != "00000") 
             {
-                //new_guesses[w] = new_guess_array(w, in_word, guess, all_words, total);
+                cout << "These letters are in the right position: " << position << endl;
+            }
+            else
+            {
+                cout << "No letters were in the right position." << endl;
+            }
+
+            in_word = letters_elsewhere(guess, hidden, position);
+            if (in_word != "") 
+            {
+                cout << "These letters are in the word, but not in the right position: " << in_word << endl;
+            }
+            else {
+                cout << "No other letters appear in the word." << endl;
+            }
+
+            if (position == "00000")
+            {
+                for (int w=0; w<total; w++)
+                {
+                    new_guesses[w] = new_guess_array_no_position(all_words[w], in_word, guess, previous_guesses, max_guess_num);
+                }
+
+                cout << "The next " << num_suggestions << " best words to try are: " << endl;
+                for (int s=1; s<num_suggestions+1; s++) 
+                {
+                    cout << best_word(total, new_guesses, s) << endl;
+                }
+            }
+
+            else 
+            {
+                for (int w=0; w<total; w++) 
+                {
+                    new_guesses[w] = new_guess_array(total, all_words[w], guess, position, in_word, make_position_guesses(w, all_words, position), previous_guesses, max_guess_num);
+                }
+
+                cout << "The next " << num_suggestions << " best words to try are: " << endl;
+                for (int s=1; s<num_suggestions+1; s++) 
+                {
+                    cout << best_word(total, new_guesses, s) << endl;
+                }
+            }
+
+            previous_guesses[round] = guess;
+
+            cout << "Which word would you like to guess next?: ";
+            cin >> guess;
+            round++;
+
+            if (round >= max_guess_num) 
+            {
+                cout << "Sorry, we've run out of memory to store your guesses. The program will now end." << endl;
+                exit(EXIT_FAILURE);
             }
         }
 
-        return "holds";
+        cout << "Congrats! You won the wordle. The hidden word was: " << guess << endl;   
     }
 }
 

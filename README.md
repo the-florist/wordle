@@ -38,3 +38,9 @@ IMPORTANT: This function ranks words based on how common their individual
 letters are, *not* how common the word itself is. I don't currently have 
 the data to add this feature but I suspect it would improve the accuracy 
 of the ranking algorithm significantly.
+
+To-dos:
+1. put two new guess array generators into functions file
+2. test these out to make sure they work here
+3. finish the interactive function
+4. (new branch) put the new subroutines into the independent function

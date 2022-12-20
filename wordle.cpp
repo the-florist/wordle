@@ -13,7 +13,7 @@ int main() {
     string hid;
     string ans;
 
-    int test = 1;
+    int test = 0;
 
     read_words(tot, words);
 
@@ -21,9 +21,28 @@ int main() {
     //hid = "stick";
     //ans = independent(hid, tot, words);
     //cout << "Is this your word?: " << ans << endl;
+
+    string start = "harls";
+    string temp = letters_in_position(start, "helps");
+    string float_lets = letters_elsewhere(start, "helps", temp);
+    cout << temp << endl;
+    cout << float_lets << endl;
+
+    string new_guesses[tot];
+
+    string previous_guesses[3] = {"stout", "stood", "sloop"};
+    int previous_guesses_len = 3;
+
+    for (int w=0; w<tot; w++)
+    {
+        new_guesses[w] = "";
+        new_guesses[w] = new_guess_array_correct_letters(w, tot, words, start, temp, float_lets, previous_guesses, previous_guesses_len);
+        //new_guesses[w] = new_guess_array(words[w], float_lets, start, previous_guesses, previous_guesses_len);
+    }
     
-    /*cout << "The first three best words are: ";
-    cout << best_word(tot, words, 1) << " " << best_word(tot, words, 2) << " " << best_word(tot, words, 3) << endl;*/
+    print_string_list(new_guesses, tot, "new guesses");
+
+    //interactive(start, tot, words);
     
     if(test==1)
     {
@@ -54,7 +73,7 @@ int main() {
         string best = best_word(tot, words, 1);
         
         int strt;
-        char start[6];
+        string start;
         cout << "You have chosen to play interactively.\nDo you wish to enter a starting word (0) or use the best starting word (1)?: ";
         cin >> strt;
 

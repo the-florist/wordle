@@ -41,5 +41,4 @@ of the ranking algorithm significantly.
 
 To-dos:
 2. make sure this words for both independent and interactive mode
-    To make this work: need to addess the case where temp is empty but in_word is not!
 3. (new branch) put the new subroutines into the independent function

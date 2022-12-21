@@ -3,7 +3,7 @@
 //For the purpose of assessment in the Michaelmas 2022 Research in Computing course.
 
 #include "header.hpp"
-#include "functions.cpp"
+#include "modes.cpp"
 
 int main() {
     //declaring main type variables
@@ -45,11 +45,11 @@ int main() {
     }
     
     print_string_list(new_guesses, tot, "new guesses");*/
-    //cout << eliminated_letter_remover(start, guess) << endl;
-    //cout << letters_in_position_comp("cores", "cutes") << endl;
-    cout << eliminated_letter_remover("00000", "sorespalay", "quilt", 0) << endl;
+    //cout << eliminated_letter_remover("0i0py", "sorescannfllkttwmp", "hippy", 1) << endl;
+    //cout << letters_in_position_comp("sores", "hippy", "") << endl;
+    //cout << eliminated_letter_remover("00000", "sorespaay", "quilt", 0) << endl;
 
-    //interactive(start, tot, words);
+    interactive(start, tot, words);
     
     if(test==1)
     {

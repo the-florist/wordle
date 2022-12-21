@@ -13,21 +13,21 @@ int main() {
     string hid;
     string ans;
 
-    int test = 0;
+    int test = 1;
 
     read_words(tot, words);
 
     //Independent test block
-    //narrow_down(tot, words);
-    //hid = "stick";
-    //ans = independent(hid, tot, words);
-    //cout << "Is this your word?: " << ans << endl;
+    /*narrow_down(tot, words);
+    hid = "stick";
+    ans = independent(hid, tot, words);
+    cout << "Is this your word?: " << ans << endl;*/
 
     //Interactive test block
-    string start = "sores";
-    //cout << "Guess: " << start << endl;
+    /*string start = "helps";
+    cout << "Guess: " << start << endl;
 
-    /*string temp = letters_in_position(start, "helps");
+    string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);
     cout << temp << endl;
     cout << float_lets << endl;
@@ -41,15 +41,13 @@ int main() {
     {
         new_guesses[w] = "";
         new_guesses[w] = new_guess_array(tot, words[w], start, temp, float_lets, make_position_guesses(w, words, temp), previous_guesses, previous_guesses_len);
-        //new_guesses[w] = new_guess_array(words[w], float_lets, start, previous_guesses, previous_guesses_len);
     }
     
-    print_string_list(new_guesses, tot, "new guesses");*/
-    //cout << eliminated_letter_remover("0i0py", "sorescannfllkttwmp", "hippy", 1) << endl;
-    //cout << letters_in_position_comp("sores", "hippy", "") << endl;
-    //cout << eliminated_letter_remover("00000", "sorespaay", "quilt", 0) << endl;
+    print_string_list(new_guesses, tot, "new guesses");
+    cout << eliminated_letter_remover("000e0", "hlpsran", "noted") << endl;
+    cout << letters_in_position_comp("ranee", "noted", "n") << endl;*/
 
-    interactive(start, tot, words);
+    //interactive(start, tot, words);
     
     if(test==1)
     {
@@ -62,7 +60,7 @@ int main() {
     if (typ == 0) 
     {
         int max;
-        cout << "You have chosen to play independently.\nPlease enter a word for me to find: ";
+        cout << "---------\nYou have chosen to play independently.\nPlease enter a word for me to find: ";
         cin >> hid;
 
         cout << "Please enter a maximum number of times you want me to guess: ";
@@ -81,7 +79,7 @@ int main() {
         
         int strt;
         string start;
-        cout << "You have chosen to play interactively.\nDo you wish to enter a starting word (0) or use the best starting word (1)?: ";
+        cout << "\nYou have chosen to play interactively.\nDo you wish to enter a starting word (0) or use the best starting word (1)?: ";
         cin >> strt;
 
         if (strt == 0)
@@ -98,9 +96,15 @@ int main() {
             
             interactive(best, tot, words);
         }
+
+        //error trap
+        else {
+            cout << "Please enter a value of either 0 or 1." << endl;
+            exit(EXIT_FAILURE);
+        }
     }
 
-    //error message
+    //error trap
     else 
     {
         cout << "Please enter a type which is either 0 or 1.\n";

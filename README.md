@@ -41,4 +41,5 @@ of the ranking algorithm significantly.
 
 To-dos:
 2. make sure this words for both independent and interactive mode
+    Next finish up cleaning of the files and test
 3. (new branch) put the new subroutines into the independent function

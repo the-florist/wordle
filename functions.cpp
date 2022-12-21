@@ -1,72 +1,38 @@
 /*******
  * This file contains all functions which depend on the subroutines in subroutines.cpp. 
  * There are four main functions here:
- * 1. new_guess_array_no_position returns an array of new candidates if no letters are in the right position.
- * 2. new_guess_array does the same thing but using letters that are in the correct position.
- * 3. best_word returns the nth "best" word from an array (see README for justification of this classification method).
- * 4. narrow_down is the basic routine for independent mode, by generating a new best guess based on previous information.
+ * 1. new_guess_array returns a new candidate based upon info gathered from current and past guesses.
+ * 2. best_word returns the nth "best" word from an array (see README for justification of this classification method).
+ * 3. narrow_down is the basic routine for independent mode, by generating a new best guess based on previous information.
 *******/
 
 #include "header.hpp"
 #include "subroutines.cpp"
 
-string new_guess_array_no_position(string word_from_array, string in_word, string guess_word, string temp_comp, string previous[], int previous_len) 
+string new_guess_array(string word_from_array, string guess_word, string in_word, string temp, string temp_comp, string previous[], int previous_len) 
 {
-    string new_guess = ""; //candidate
-    string in_word_temp = in_word; //letters in the word, that I can alter in the function
-    string zero = "0"; //the zero string
+    /*
+    Entry key:
+    1. a word from a list; either all_words if no letters are correct, or a candidate with correct letters in the right position.
+    2. the current guess.
+    3. string with floating letters in it.
+    4. string with those letters in the correct position (or "00000").
+    5. string with all eliminated letters.
+    6. array of all previous guesses.
+    7. the maximum number of rounds.
+    */
 
-    //
-    int count = 0;
-    for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
-    {
-        if (in_word_temp[ll] == word_from_array[l]) 
-        {
-            in_word_temp[ll] = zero[0];
-            count++;
-        }
-        else
-        {
-            continue;
-        }
-    }
+    string new_guess = "";          //candidates
+    string in_word_temp = in_word;  //letters in the word, that I can alter in the function
+    string zero = "0";              //the zero string
 
-    //
-    if (word_from_array == guess_word)
-    {
-        new_guess = "";
-    }
-    else if (count == in_word.length())
-    {
-        new_guess = word_from_array;
-    }
-    else 
-    {
-        new_guess = "";
-    }
-
-    //
-    new_guess = prev_guess_remover(previous_len, previous, new_guess, word_from_array);
-    new_guess = eliminated_letter_remover("00000", temp_comp, new_guess, 0);
-
-    return new_guess;
-}
-
-//This runs fine and fast now!
-//***************
-string new_guess_array(int total, string word_from_array, string guess_word, string temp, string temp_comp, string in_word, string position_guess, string previous[], int previous_len) 
-{
-    string new_guess = ""; //candidates
-    string in_word_temp = in_word;
-    string zero = "0";
-
-    //This adds to candidate array
-    if (position_guess != "")
+    //this counts the number of floating letters in the candidate
+    if (word_from_array != "")
     {
         int count = 0;
         for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
         {
-            if (temp[l] == zero[0] && position_guess[l] == in_word_temp[ll]) 
+            if (temp[l] == zero[0] && word_from_array[l] == in_word_temp[ll]) 
             {
                 in_word_temp[ll] = zero[0];
                 count++;
@@ -77,42 +43,41 @@ string new_guess_array(int total, string word_from_array, string guess_word, str
             }
         }
 
-        if (position_guess == guess_word)
+        //This approves a candidate if it contains all floating letters
+        if (word_from_array == guess_word)
         {
             new_guess = "";
         }
         else if (count == in_word.length())
         {
-            new_guess = position_guess;
+            new_guess = word_from_array;
         }
         else 
         {
             new_guess = "";
         }
 
-        new_guess = prev_guess_remover(previous_len, previous, new_guess, position_guess);
-        new_guess = eliminated_letter_remover(temp, temp_comp, new_guess, 1);
+        //This eliminates a candidate if it is a previous guess or it contains eliminated letters
+        new_guess = position_remover(guess_word, new_guess, temp);
+        new_guess = prev_guess_remover(previous_len, previous, new_guess, word_from_array);
+        new_guess = eliminated_letter_remover(temp, temp_comp, new_guess);
     }
 
     return new_guess;
 }
 
-string best_word(int total, string all_words[], int nth)
+string best_word(int total, string word_array[], int nth)
 {
     /**********
-    This function calculates the scores array which is used with the nth_best
-         function to determine the nth-best word.
     Entry key:
     1. Total number of words accepted by the game (default is 12947)
     2. An array containing all of these words in string format
     3. The nth best word you would like (i.e. first best, second best, etc.)
     **********/
-
-    int check_scores = 1;
     
     string alphabet = "abcdefghijklmnopqrstuvwxyz";
-    float prob[26][6]; //first index is letter, second is position
-    float score[total];
+    float prob[26][6];                                  //first index counts the letter, second counts its position
+    float score[total];                                 //array that stores the score values
     int count = 0;
 
     for (int w=0; w<total; w++) 
@@ -120,14 +85,14 @@ string best_word(int total, string all_words[], int nth)
         score[w] = 0.;
     }
 
-    //This loop calculates the probabilities for each letter of the alphabet as a function of word position.
+    //This calculates the probabilities for each letter of the alphabet as a function of word position.
     for (int a=0; a<26; a++) for (int l=0; l<6; l++) 
     {
         for (int w=0; w<total; w++) 
         {
-            if (alphabet[a] == all_words[w][l])
+            if (alphabet[a] == word_array[w][l])
             {
-                count ++;
+                count++;
             }
             else
             {
@@ -142,13 +107,13 @@ string best_word(int total, string all_words[], int nth)
     for (int w=0; w<total; w++) for (int l=0; l<6; l++) for (int a=0; a<26; a++) 
     {
 
-        if (alphabet[a] == all_words[w][l])
+        if (alphabet[a] == word_array[w][l])
         {
             score[w] += prob[a][l];
         }
-        else if (all_words[w] == "")
+        else if (word_array[w] == "")
         {
-            score[w] = 0;
+            score[w] = 0.;
         }
         else 
         {
@@ -158,10 +123,11 @@ string best_word(int total, string all_words[], int nth)
     }
 
     int best_index = nth_best(total, score, nth);
-    //cout << "Score: " << score[best_index] << endl;
-    return all_words[best_index];
+    return word_array[best_index];
 }
 
+
+//FIXME
 string narrow_down(string guess_word, string hidden_word, string prev_guesses[], int prev_guess_len, int total, string all_words[]) 
 {
     /*What this function does:

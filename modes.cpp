@@ -8,7 +8,7 @@ void interactive(string start_word, int total, string all_words[])
     2. if the starting word is the guess word, return the guess as the answer.
     3. if not, determine how many letters are correct and/or in the right position, 
             and return this to the user.
-    4. at return, the program should also suggest five of the best words for the user 
+    4. at return, the program also suggests five of the best words for the user 
             to chose from if she chooses.
     5. take a new starting word from the user and repeat the process.
     */
@@ -16,10 +16,14 @@ void interactive(string start_word, int total, string all_words[])
     //This chooses a random word from the list to be hidden
     srand(time(NULL));
     string hidden = all_words[(int)rand() % total];
+    
+    //string hidden = "noted"; //use me for debugging
+    //cout << "Hidden: " << hidden << endl;
 
     int max_guess_num = 100;                //maximum rounds (to somewhat preserve memory)
     int round = 0;                          //number of times you've guessed
     string previous_guesses[max_guess_num]; //tracks previous guesses
+
     for (int g=0; g<max_guess_num; g++) 
     {
         previous_guesses[g] = "";
@@ -39,21 +43,28 @@ void interactive(string start_word, int total, string all_words[])
         string position_complement; //tracks which letters have been eliminated
         string in_word = "";        //tracks which letters appear but aren't in the right position
         int num_suggestions = 5;    //how many suggestions the computer should give you at the end
+        string new_guesses[total];  //array containing all the new candidates
 
         while (guess != hidden) 
         {
-            string new_guesses[total];
+            //resets the array of candidates
+            for (int t=0; t<total; t++) 
+            {
+                new_guesses[t] = "";
+            }
 
+            //calculates which letters are in the right position
             position = letters_in_position(guess, hidden);
             if (position != "00000") 
             {
-                cout << "These letters are in the right position: " << position << endl;
+                cout << "\nThese letters are in the right position: " << position << endl;
             }
             else
             {
                 cout << "No letters were in the right position." << endl;
             }
 
+            //calculates which letters are right but not in position
             in_word = letters_elsewhere(guess, hidden, position);
             if (in_word != "") 
             {
@@ -63,48 +74,42 @@ void interactive(string start_word, int total, string all_words[])
                 cout << "No other letters appear in the word." << endl;
             }
 
+            //adds all letters that have been eliminated to the complement
             position_complement += letters_in_position_comp(guess, hidden, in_word);
 
-            //This runs if no letters are in the right place
-            if (position == "00000")
+            //generates a new array of candidates depending on if some letters are in the right position
+            for (int w=0; w<total; w++) 
             {
-                for (int w=0; w<total; w++)
+                if (position == "00000") 
                 {
-                    new_guesses[w] = new_guess_array_no_position(all_words[w], in_word, guess, position_complement, previous_guesses, max_guess_num);
+                    new_guesses[w] = new_guess_array(all_words[w], guess, in_word, position, position_complement, previous_guesses, max_guess_num);
                 }
 
-                print_position_complement(position_complement);
-
-                cout << "The next " << num_suggestions << " best words to try are: " << endl;
-                for (int s=1; s<num_suggestions+1; s++) 
+                else 
                 {
-                    cout << best_word(total, new_guesses, s) << endl;
+                    new_guesses[w] = new_guess_array(make_position_guesses(w, all_words, position), guess, in_word, position, position_complement, previous_guesses, max_guess_num);
                 }
             }
 
-            //This runs if some letters were in the right place
-            else 
+            //returns the letters that have been eliminated
+            //print_position_complement(position_complement);
+
+            //returns the next best n guesses
+            cout << "\nThe next " << num_suggestions << " best words to try are: " << endl;
+            for (int s=1; s<num_suggestions+1; s++) 
             {
-                for (int w=0; w<total; w++) 
-                {
-                    new_guesses[w] = new_guess_array(total, all_words[w], guess, position, position_complement, in_word, make_position_guesses(w, all_words, position), previous_guesses, max_guess_num);
-                }
-
-                print_position_complement(position_complement);
-
-                cout << "The next " << num_suggestions << " best words to try are: " << endl;
-                for (int s=1; s<num_suggestions+1; s++) 
-                {
-                    cout << best_word(total, new_guesses, s) << endl;
-                }
+                cout << best_word(total, new_guesses, s) << endl;
             }
 
+            //puts the current guess in the array of previous guesses
             previous_guesses[round] = guess;
 
+            //reads in the new guess
             cout << "Which word would you like to guess next?: ";
             cin >> guess;
             round++;
 
+            //determines if you've maximised the number of rounds
             if (round >= max_guess_num) 
             {
                 cout << "Sorry, we've run out of memory to store your guesses. The program will now end." << endl;

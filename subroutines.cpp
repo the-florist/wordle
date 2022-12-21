@@ -247,50 +247,43 @@ string letters_elsewhere(string guess_word, string hidden_word, string temp)
 Subroutines for generating a new list of guesses
 ********/
 
-string eliminated_letter_remover(string let, string let_comp, string next_guess, int pos_bool) 
+string position_remover(string guess, string candidate, string temp) 
+{
+    /*
+    This function eliminates a candidate if it has a letter in the same position as the guess that
+        was not in the correct position.
+    */
+    for (int l=0; l<6; l++) 
+    {
+        if (candidate[l] == guess[l] && guess[l] != temp[l]) 
+        {
+            candidate = "";
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    return candidate;
+}
+
+string eliminated_letter_remover(string let, string let_comp, string next_guess) 
 {
     /*
     This function eliminates words from the list of candidates if they contain letters
         that have been ruled out by current and previous guesses.
-    This function has two options, given by pos_bool: 0 if no letters are in the right position, and 1 
-        if some letters are in the right position. This flag should be hard-coded in the new_guess_array routines.
     */
 
-   //Error trap
-    if (pos_bool != 0 && pos_bool != 1)
+    for (int l=0; l<5; l++) for (int ll=0; ll<let_comp.length(); ll++)
     {
-        printf("You have called an illegal instance of eliminated_letter_remover, please examine your use of this function.\n");
-        exit(EXIT_FAILURE);
-    }
-
-
-    if (pos_bool == 0)
-    {
-        for (int l=0; l<5; l++) for (int ll=0; ll<let_comp.length(); ll++)
+        if (next_guess[l] == let_comp[ll] && let[l] != let_comp[ll]) 
         {
-            if (next_guess[l] == let_comp[ll]) 
-            {
-                next_guess = "";
-            }
-            else 
-            {
-                continue;
-            }
+            next_guess = "";
         }
-    }
-
-    else 
-    {
-        for (int l=0; l<5; l++) for (int ll=0; ll<let_comp.length(); ll++)
+        else 
         {
-            if (next_guess[l] == let_comp[ll] && let[l] != let_comp[ll]) 
-            {
-                next_guess = "";
-            }
-            else 
-            {
-                continue;
-            }
+            continue;
         }
     }
 

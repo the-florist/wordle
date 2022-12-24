@@ -79,7 +79,7 @@ int main() {
         
         int strt;
         string start;
-        cout << "\nYou have chosen to play interactively.\nDo you wish to enter a starting word (0) or use the best starting word (1)?: ";
+        cout << "---------\nYou have chosen to play interactively.\nDo you wish to enter a starting word (0) or use the best starting word (1)?: ";
         cin >> strt;
 
         if (strt == 0)

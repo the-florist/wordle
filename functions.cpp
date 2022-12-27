@@ -24,7 +24,6 @@ string new_guess_array(string word_from_array, string guess_word, string in_word
 
     string new_guess = "";          //candidates
     string in_word_temp = in_word;  //letters in the word, that I can alter in the function
-    string zero = "0";              //the zero string
 
     //this counts the number of floating letters in the candidate
     if (word_from_array != "")

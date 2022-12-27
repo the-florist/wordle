@@ -41,13 +41,15 @@ int main()
 
     //Interactive test block
     string start = "triti";
-    //cout << "Guess: " << start << endl;
-    //string hidden = "voter";
-    //string prev_comp = "crzh";
+    cout << "Guess: " << start << endl;
+    string hidden = "tiyni";
+    cout << "Hidden: " << hidden << endl;
+    string temp = letters_in_position(start, hidden);
+    cout << "Temp: " << temp << endl;
 
-    interactive(start, tot, words);
+    //interactive(start, tot, words);
 
-    //cout << prev_comp + letters_in_position_comp(start, hidden, prev_comp) << endl;
+    cout <<  letters_elsewhere(start, hidden, temp) << endl;
     fclose(debug_out);
 
     /*string temp = letters_in_position(start, "helps");

@@ -10,3 +10,4 @@ using namespace std;
 
 int debug = 1;
 FILE *debug_out;
+string zero = "0";

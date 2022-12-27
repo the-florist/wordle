@@ -58,7 +58,6 @@ void print_position_complement(string pos_comp)
     This function prints the position complement in a nice way 
         which takes the specific complement formatting into account.
     */
-    string zero = "0";
 
     if (debug != 1) 
     {
@@ -85,6 +84,34 @@ void print_position_complement(string pos_comp)
         }
         printf("\n");
     }
+}
+
+string find_unique_letters(string to_compress) 
+{
+    string shortn = "";
+    int len = to_compress.length();
+
+    for (int s=0; s<len; s++) {
+        shortn += zero[0];
+    }
+
+    for (int l=0; l<len; l++) 
+    {
+        shortn[l] = to_compress[l];
+
+        for (int ll=0; ll<l; ll++)
+        {
+            if (shortn[l] == shortn[ll])
+            {
+                shortn[l] = zero[1];
+            }
+            else 
+            {
+                continue;
+            }
+        }
+    }
+    return shortn;
 }
 
 void print_to_debug_file(int round, string guess, string hidden, string position, string in_word, string position_complement, string best)
@@ -189,31 +216,12 @@ string letters_in_position_comp(string guess_word, string hidden_word, string pr
         by current and previous guesses.
     */
     string temp;
-    string shortn = "00000";
+    string shortn_guess = find_unique_letters(guess_word);
     int is_in[5] = {0,0,0,0,0};
-    string zero = "0";
-
-    //removes duplicate letters in the guess word
-    for (int l=0; l<5; l++) 
-    {
-        shortn[l] = guess_word[l];
-
-        for (int ll=0; ll<l; ll++)
-        {
-            if (shortn[l] == shortn[ll])
-            {
-                shortn[l] = zero[1];
-            }
-            else 
-            {
-                continue;
-            }
-        }
-    }
 
     if (debug==1)
     {
-        cout << "Shortened guess: " << shortn << endl;
+        cout << "Shortened guess: " << shortn_guess << endl;
     }
 
     //determines if guess letter is in hidden word
@@ -222,7 +230,7 @@ string letters_in_position_comp(string guess_word, string hidden_word, string pr
     {
         for (int j=0; j<5; j++)
         {
-            if (shortn[i] == hidden_word[j])
+            if (shortn_guess[i] == hidden_word[j])
             {
                 is_in[i] = 1;
             }
@@ -234,7 +242,7 @@ string letters_in_position_comp(string guess_word, string hidden_word, string pr
 
         for (int k=0; k<prev_comp.length(); k++) 
         {
-            if (shortn[i] == prev_comp[k])
+            if (shortn_guess[i] == prev_comp[k])
             {
                 is_in[i] = 1;
             }
@@ -250,7 +258,7 @@ string letters_in_position_comp(string guess_word, string hidden_word, string pr
     {
         if (is_in[i] != 1) 
         {
-            temp += shortn[i];
+            temp += shortn_guess[i];
         }
     }
 
@@ -264,41 +272,37 @@ string letters_elsewhere(string guess_word, string hidden_word, string temp)
         right position but do appear somewhere in the word.
     */
     string in_word = "";
-    int let = 0;
-    while (let < 6)
+    int l = 0;
+
+    //removes duplicate letters in the guess and hidden words
+    string shortn_guess = find_unique_letters(guess_word);
+    string shortn_hidden = find_unique_letters(hidden_word);
+
+    if (debug == 1) 
     {
-        //Deals with doubled letters
-        for (int lt=0; lt<let; lt++)
-        {
-            if (guess_word[let] == guess_word[lt])
-            {
-                let++;
-                break;
-            }
+        cout << "Shortened guess: " << shortn_guess << endl;
+        cout << "Shortened hidden: " << shortn_hidden << endl;
+    }
 
-            else
-            {
-                continue;
-            }
-        }
-
+    while (l<6)
+    {
         //Removes letters that are already accounted for in temp
         for (int lh=0; lh<6; lh++)
         {
-            if (guess_word[let] == temp[lh])
+            if (shortn_guess[l] == temp[lh])
             {
                 continue;
             }
-            else if (guess_word[let] == hidden_word[lh])
+            else if (shortn_guess[l] == shortn_hidden[lh])
             {
-                in_word += guess_word[let];
+                in_word += shortn_guess[l];
             }
             else
             {
                 continue;
             }
         }
-        let++;
+        l++;
     }
 
     return in_word;
@@ -377,7 +381,6 @@ string make_position_guesses(int word, string all_words[], string temp)
     This function returns a new candidate if it contains all letters which are in the right position.
     */
     string position_guess = "";
-    string zero = "0";
 
     for (int l=0; l<5; l++)
     {

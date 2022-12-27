@@ -40,4 +40,4 @@ the data to add this feature but I suspect it would improve the accuracy
 of the ranking algorithm significantly.
 
 To address with interact debugging:
-1. make letters_elsewhere compatible with duplicate letters in hidden and guess together.
+1. current routine is too constraining, doesn't detect when letters are duplicate in both guess and hidden and not in the right spots

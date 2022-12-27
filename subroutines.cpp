@@ -182,59 +182,75 @@ string letters_in_position(string guess_word, string hidden_word)
     return temp;
 }
 
-string letters_in_position_comp(string guess_word, string hidden_word, string lets_in_word) 
+string letters_in_position_comp(string guess_word, string hidden_word, string prev_comp) 
 {
     /*
     This function generates a string containing all letters which have been eliminated
         by current and previous guesses.
     */
     string temp;
-    int count;
+    string shortn = "00000";
+    int is_in[5] = {0,0,0,0,0};
+    string zero = "0";
 
-   for (int l=0; l<6; l++)
+    //removes duplicate letters in the guess word
+    for (int l=0; l<5; l++) 
     {
-        count = 0;
-        for (int ll=0; ll<6; ll++)
-        {
-            if (guess_word[l] != hidden_word[ll])
-            {
-                count++;
-            }
-            else
-            {
-                continue;
-            }
-        }
-        
-        if (lets_in_word != "") 
-        {
-            for (int lw=0; lw<lets_in_word.length(); lw++)
-            {
-                if (guess_word[l] == lets_in_word[lw]) 
-                {
-                    continue;
-                }
-                else if (count != 5) 
-                {
-                    temp += guess_word[l];
-                }
-                else 
-                {
-                    continue;
-                }
-            }
-        }
+        shortn[l] = guess_word[l];
 
-        else 
+        for (int ll=0; ll<l; ll++)
         {
-            if (count != 5) 
+            if (shortn[l] == shortn[ll])
             {
-                temp += guess_word[l];
+                shortn[l] = zero[1];
             }
             else 
             {
                 continue;
             }
+        }
+    }
+
+    if (debug==1)
+    {
+        cout << "Shortened guess: " << shortn << endl;
+    }
+
+    //determines if guess letter is in hidden word
+    //or if it has already been eliminated.
+    for (int i=0; i<5; i++) 
+    {
+        for (int j=0; j<5; j++)
+        {
+            if (shortn[i] == hidden_word[j])
+            {
+                is_in[i] = 1;
+            }
+            else 
+            {
+                continue;
+            }
+        }
+
+        for (int k=0; k<prev_comp.length(); k++) 
+        {
+            if (shortn[i] == prev_comp[k])
+            {
+                is_in[i] = 1;
+            }
+            else 
+            {
+                continue;
+            }
+        }
+    }
+
+    //adds letter to temp if it is newly eliminated.
+    for (int i=0; i<5; i++)
+    {
+        if (is_in[i] != 1) 
+        {
+            temp += shortn[i];
         }
     }
 

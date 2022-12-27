@@ -15,7 +15,7 @@ void interactive(string start_word, int total, string all_words[])
     
    string hidden;
 
-    if (debug !=1 )
+    if (debug !=1)
     {
         //This chooses a random word from the list to be hidden
         srand(time(NULL));
@@ -24,7 +24,10 @@ void interactive(string start_word, int total, string all_words[])
     
     else if (debug == 1)
     {
-        hidden = "noted"; //use me for debugging
+        //This chooses a random word from the list to be hidden
+        srand(time(NULL));
+        hidden = all_words[(int)rand() % total];
+        hidden = "tiyin"; //use me for debugging
         cout << "Hidden: " << hidden << endl;
     }
 

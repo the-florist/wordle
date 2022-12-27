@@ -40,8 +40,15 @@ int main()
     cout << "Is this your word?: " << ans << endl;*/
 
     //Interactive test block
-    string start = "helps";
-    cout << "Guess: " << start << endl;
+    string start = "triti";
+    //cout << "Guess: " << start << endl;
+    //string hidden = "voter";
+    //string prev_comp = "crzh";
+
+    interactive(start, tot, words);
+
+    //cout << prev_comp + letters_in_position_comp(start, hidden, prev_comp) << endl;
+    fclose(debug_out);
 
     /*string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);
@@ -62,9 +69,6 @@ int main()
     print_string_list(new_guesses, tot, "new guesses");
     cout << eliminated_letter_remover("000e0", "hlpsran", "noted") << endl;
     cout << letters_in_position_comp("ranee", "noted", "n") << endl;*/
-
-    interactive(start, tot, words);
-    fclose(debug_out);
     
     if(test==1)
     {

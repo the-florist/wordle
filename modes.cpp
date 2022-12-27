@@ -13,12 +13,20 @@ void interactive(string start_word, int total, string all_words[])
     5. take a new starting word from the user and repeat the process.
     */
     
-    //This chooses a random word from the list to be hidden
-    srand(time(NULL));
-    string hidden = all_words[(int)rand() % total];
+   string hidden;
+
+    if (debug !=1 )
+    {
+        //This chooses a random word from the list to be hidden
+        srand(time(NULL));
+        hidden = all_words[(int)rand() % total];
+    }
     
-    //string hidden = "noted"; //use me for debugging
-    //cout << "Hidden: " << hidden << endl;
+    else if (debug == 1)
+    {
+        hidden = "noted"; //use me for debugging
+        cout << "Hidden: " << hidden << endl;
+    }
 
     int max_guess_num = 100;                //maximum rounds (to somewhat preserve memory)
     int round = 0;                          //number of times you've guessed
@@ -92,7 +100,10 @@ void interactive(string start_word, int total, string all_words[])
             }
 
             //returns the letters that have been eliminated
-            //print_position_complement(position_complement);
+            if (debug == 1) 
+            {
+                print_position_complement(position_complement);
+            }
 
             //returns the next best n guesses
             cout << "\nThe next " << num_suggestions << " best words to try are: " << endl;
@@ -103,6 +114,13 @@ void interactive(string start_word, int total, string all_words[])
 
             //puts the current guess in the array of previous guesses
             previous_guesses[round] = guess;
+
+            if (debug == 1)
+            {
+                string best = best_word(total, new_guesses, 1);
+                print_to_debug_file(round, guess, hidden, position, in_word, position_complement, best);
+                fprintf(debug_out, "\n\n");
+            }
 
             //reads in the new guess
             cout << "Which word would you like to guess next?: ";
@@ -115,6 +133,7 @@ void interactive(string start_word, int total, string all_words[])
                 cout << "Sorry, we've run out of memory to store your guesses. The program will now end." << endl;
                 exit(EXIT_FAILURE);
             }
+
         }
 
         cout << "Congrats! You won the wordle. The hidden word was: " << guess << endl;   

@@ -7,3 +7,6 @@
 #include <vector>
 #include <ctime>
 using namespace std;
+
+int debug = 1;
+FILE *debug_out;

@@ -2,10 +2,11 @@
 //Created December 2022 by Ericka Florio
 //For the purpose of assessment in the Michaelmas 2022 Research in Computing course.
 
-#include "header.hpp"
+//#include "header.hpp"
 #include "modes.cpp"
 
-int main() {
+int main() 
+{
     //declaring main type variables
     int tot=12947;
     int typ;
@@ -13,7 +14,22 @@ int main() {
     string hid;
     string ans;
 
-    int test = 1;
+    int test;
+
+    if (debug != 1) 
+    {
+        test = 1;
+    }
+    else if (debug == 1)
+    {
+        test = 0;
+        debug_out = fopen("./tools/debug_output.txt", "w");
+    }
+    else 
+    {
+        printf("Debug flag isn't working, stopping program.");
+        exit(EXIT_FAILURE);
+    }
 
     read_words(tot, words);
 
@@ -24,10 +40,10 @@ int main() {
     cout << "Is this your word?: " << ans << endl;*/
 
     //Interactive test block
-    /*string start = "helps";
+    string start = "helps";
     cout << "Guess: " << start << endl;
 
-    string temp = letters_in_position(start, "helps");
+    /*string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);
     cout << temp << endl;
     cout << float_lets << endl;
@@ -47,7 +63,8 @@ int main() {
     cout << eliminated_letter_remover("000e0", "hlpsran", "noted") << endl;
     cout << letters_in_position_comp("ranee", "noted", "n") << endl;*/
 
-    //interactive(start, tot, words);
+    interactive(start, tot, words);
+    fclose(debug_out);
     
     if(test==1)
     {

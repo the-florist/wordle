@@ -6,7 +6,7 @@
  * 3. narrow_down is the basic routine for independent mode, by generating a new best guess based on previous information.
 *******/
 
-#include "header.hpp"
+//#include "header.hpp"
 #include "subroutines.cpp"
 
 string new_guess_array(string word_from_array, string guess_word, string in_word, string temp, string temp_comp, string previous[], int previous_len) 

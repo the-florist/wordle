@@ -22,7 +22,7 @@ void read_words(int total, string word_array[])
     char reads[total][6];
 
     FILE *wordfile;
-    wordfile = fopen("WordleWords.txt","r");
+    wordfile = fopen("./docs/WordleWords.txt","r");
 
     for (int i=0; i<total; i++)
     {
@@ -59,19 +59,64 @@ void print_position_complement(string pos_comp)
         which takes the specific complement formatting into account.
     */
     string zero = "0";
-    cout << "These letters have been eliminated: ";
-    for (int i=0; i<pos_comp.length(); i++)
+
+    if (debug != 1) 
     {
-        if (pos_comp[i] != zero[0])
+        cout << "These letters have been eliminated: ";
+        for (int i=0; i<pos_comp.length(); i++)
+        {
+            if (pos_comp[i] != zero[0])
+            {
+                cout << pos_comp[i];
+            }
+            else 
+            {
+                continue;
+            }
+        }
+        printf("\n");
+    }
+
+    else if (debug == 1)
+    {
+        for (int i=0; i<pos_comp.length(); i++)
         {
             cout << pos_comp[i];
         }
-        else 
-        {
-            continue;
-        }
+        printf("\n");
     }
-    printf("\n");
+}
+
+void print_to_debug_file(int round, string guess, string hidden, string position, string in_word, string position_complement, string best)
+{
+
+    cout << "Printing to file..." << endl;
+    fprintf(debug_out,"Round: %i\n", round);
+    fprintf(debug_out,"Guess: ");
+    for (int i=0; i<5; i++)
+    {
+        fprintf(debug_out,"%c", guess[i]);
+    }
+    fprintf(debug_out, "\nHidden: ");
+    for (int i=0; i<5; i++){
+        fprintf(debug_out, "%c", hidden[i]);
+    }
+    fprintf(debug_out, "\nPosition: ");
+    for (int i=0; i<5; i++){
+        fprintf(debug_out, "%c", position[i]);
+    }
+    fprintf(debug_out, "\nLetters in word: ");
+    for (int i=0; i<in_word.length(); i++){
+        fprintf(debug_out, "%c", in_word[i]);
+    }
+    fprintf(debug_out,"\nPosition complement: ");
+    for (int i=0; i<position_complement.length(); i++){
+        fprintf(debug_out, "%c", position_complement[i]);
+    }
+    fprintf(debug_out, "\nBest word: ");
+    for (int i=0; i<5; i++){
+        fprintf(debug_out, "%c", best[i]);
+    }
 }
 
 int nth_best(int tot_words, float scores[], int place) 

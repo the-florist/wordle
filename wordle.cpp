@@ -40,17 +40,17 @@ int main()
     cout << "Is this your word?: " << ans << endl;*/
 
     //Interactive test block
-    string start = "triti";
+    /*string start = "brims";
     cout << "Guess: " << start << endl;
-    string hidden = "tiyni";
+    string hidden = "reree";
     cout << "Hidden: " << hidden << endl;
     string temp = letters_in_position(start, hidden);
     cout << "Temp: " << temp << endl;
 
+    cout <<  letters_elsewhere(start, hidden, temp) << endl;*/
+    //string start = "brims";
     //interactive(start, tot, words);
-
-    cout <<  letters_elsewhere(start, hidden, temp) << endl;
-    fclose(debug_out);
+    //fclose(debug_out);
 
     /*string temp = letters_in_position(start, "helps");
     string float_lets = letters_elsewhere(start, "helps", temp);

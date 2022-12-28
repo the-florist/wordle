@@ -40,4 +40,4 @@ the data to add this feature but I suspect it would improve the accuracy
 of the ranking algorithm significantly.
 
 To address with interact debugging:
-1. current routine is too constraining, doesn't detect when letters are duplicate in both guess and hidden and not in the right spots
+1. in_word is fixed! Now just doing some more random tests...

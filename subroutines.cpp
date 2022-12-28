@@ -120,28 +120,34 @@ void print_to_debug_file(int round, string guess, string hidden, string position
     cout << "Printing to file..." << endl;
     fprintf(debug_out,"Round: %i\n", round);
     fprintf(debug_out,"Guess: ");
+
     for (int i=0; i<5; i++)
     {
         fprintf(debug_out,"%c", guess[i]);
     }
     fprintf(debug_out, "\nHidden: ");
-    for (int i=0; i<5; i++){
+    for (int i=0; i<5; i++)
+    {
         fprintf(debug_out, "%c", hidden[i]);
     }
     fprintf(debug_out, "\nPosition: ");
-    for (int i=0; i<5; i++){
+    for (int i=0; i<5; i++)
+    {
         fprintf(debug_out, "%c", position[i]);
     }
     fprintf(debug_out, "\nLetters in word: ");
-    for (int i=0; i<in_word.length(); i++){
+    for (int i=0; i<in_word.length(); i++)
+    {
         fprintf(debug_out, "%c", in_word[i]);
     }
     fprintf(debug_out,"\nPosition complement: ");
-    for (int i=0; i<position_complement.length(); i++){
+    for (int i=0; i<position_complement.length(); i++)
+    {
         fprintf(debug_out, "%c", position_complement[i]);
     }
     fprintf(debug_out, "\nBest word: ");
-    for (int i=0; i<5; i++){
+    for (int i=0; i<5; i++)
+    {
         fprintf(debug_out, "%c", best[i]);
     }
 }
@@ -274,15 +280,8 @@ string letters_elsewhere(string guess_word, string hidden_word, string temp)
     string in_word = "";
     int l = 0;
 
-    //removes duplicate letters in the guess and hidden words
-    string shortn_guess = find_unique_letters(guess_word);
-    string shortn_hidden = find_unique_letters(hidden_word);
-
-    if (debug == 1) 
-    {
-        cout << "Shortened guess: " << shortn_guess << endl;
-        cout << "Shortened hidden: " << shortn_hidden << endl;
-    }
+    string shortn_guess = guess_word; //This can prolly be disposed of once you're done debugging
+    string shortn_hidden = hidden_word;
 
     while (l<6)
     {
@@ -296,6 +295,8 @@ string letters_elsewhere(string guess_word, string hidden_word, string temp)
             else if (shortn_guess[l] == shortn_hidden[lh])
             {
                 in_word += shortn_guess[l];
+                shortn_hidden[lh] = zero[0];
+                break;
             }
             else
             {

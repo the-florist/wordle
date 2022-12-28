@@ -8,6 +8,6 @@
 #include <ctime>
 using namespace std;
 
-int debug = 1;
+int debug = 0;
 FILE *debug_out;
 string zero = "0";

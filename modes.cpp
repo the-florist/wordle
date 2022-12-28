@@ -24,10 +24,7 @@ void interactive(string start_word, int total, string all_words[])
     
     else if (debug == 1)
     {
-        //This chooses a random word from the list to be hidden
-        srand(time(NULL));
-        hidden = all_words[(int)rand() % total];
-        hidden = "tiyin"; //use me for debugging
+        hidden = "creed"; //use me for debugging
         cout << "Hidden: " << hidden << endl;
     }
 
@@ -68,11 +65,11 @@ void interactive(string start_word, int total, string all_words[])
             position = letters_in_position(guess, hidden);
             if (position != "00000") 
             {
-                cout << "\nThese letters are in the right position: " << position << endl;
+                cout << "---------\nThese letters are in the right position: " << position << endl;
             }
             else
             {
-                cout << "No letters were in the right position." << endl;
+                cout << "---------\nNo letters were in the right position." << endl;
             }
 
             //calculates which letters are right but not in position
@@ -109,7 +106,7 @@ void interactive(string start_word, int total, string all_words[])
             }
 
             //returns the next best n guesses
-            cout << "\nThe next " << num_suggestions << " best words to try are: " << endl;
+            cout << "The next " << num_suggestions << " best words to try are: " << endl;
             for (int s=1; s<num_suggestions+1; s++) 
             {
                 cout << best_word(total, new_guesses, s) << endl;

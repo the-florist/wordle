@@ -1,6 +1,7 @@
 /*********
  * This file containts all tests which must be passed in order for 
  * a new version of the code to upload successfully onto github.
+ * Line to test pushing with security measures.
 *********/
 
 #include "../modes.cpp"

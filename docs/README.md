@@ -39,5 +39,18 @@ letters are, *not* how common the word itself is. I don't currently have
 the data to add this feature but I suspect it would improve the accuracy 
 of the ranking algorithm significantly.
 
+## Debugging functionality ##
+
 To address with interact debugging:
 1. in_word is fixed! Now just doing some more random tests...
+
+Future improvements:
+1. Make the all_words and total vars global -- will need to check that these 
+are never altered by the program, but should improve speeds by a lot in 
+various functions.
+
+For cleanup:
+1. DONE make sure general style is ok and all functions have descriptions.
+2. DONE make sure variable names make sense and aren't duplicated in sub-functions.
+3. make sure variable entry into functions follows a consistent format.
+4. 

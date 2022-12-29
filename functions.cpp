@@ -2,18 +2,20 @@
  * This file contains all functions which depend on the subroutines in subroutines.cpp. 
  * There are four main functions here:
  * 1. new_guess_array returns a new candidate based upon info gathered from current and past guesses.
- * 2. best_word returns the nth "best" word from an array (see README for justification of this classification method).
- * 3. narrow_down is the basic routine for independent mode, by generating a new best guess based on previous information.
+ * 2. best_word returns the nth "best" word from an array (see README for justification of this 
+        classification method).
+ * 3. narrow_down is the basic routine for independent mode, by generating a new best guess based on 
+        previous information.
 *******/
 
-//#include "header.hpp"
 #include "subroutines.cpp"
 
-string new_guess_array(string word_from_array, string guess_word, string in_word, string temp, string temp_comp, string previous[], int previous_len) 
+string new_guess_array(string word_from_array, string guess_word, string lets_in_word, string pos, string pos_comp, string previous[], int previous_len) 
 {
     /*
     Entry key:
-    1. a word from a list; either all_words if no letters are correct, or a candidate with correct letters in the right position.
+    1. a word from a list; either all_words if no letters are correct, or a candidate with 
+        correct letters in the right position.
     2. the current guess.
     3. string with floating letters in it.
     4. string with those letters in the correct position (or "00000").
@@ -23,17 +25,17 @@ string new_guess_array(string word_from_array, string guess_word, string in_word
     */
 
     string new_guess = "";          //candidates
-    string in_word_temp = in_word;  //letters in the word, that I can alter in the function
+    string lets_in_word_temp = lets_in_word;  //letters in the word, which can be altered in the function
 
     //this counts the number of floating letters in the candidate
     if (word_from_array != "")
     {
         int count = 0;
-        for (int l=0; l<6; l++) for (int ll=0; ll<in_word.length(); ll++)
+        for (int l=0; l<6; l++) for (int ll=0; ll<lets_in_word.length(); ll++)
         {
-            if (temp[l] == zero[0] && word_from_array[l] == in_word_temp[ll]) 
+            if (pos[l] == zero[0] && word_from_array[l] == lets_in_word_temp[ll]) 
             {
-                in_word_temp[ll] = zero[0];
+                lets_in_word_temp[ll] = zero[0];
                 count++;
             }
             else
@@ -47,7 +49,7 @@ string new_guess_array(string word_from_array, string guess_word, string in_word
         {
             new_guess = "";
         }
-        else if (count == in_word.length())
+        else if (count == lets_in_word.length())
         {
             new_guess = word_from_array;
         }
@@ -56,16 +58,17 @@ string new_guess_array(string word_from_array, string guess_word, string in_word
             new_guess = "";
         }
 
-        //This eliminates a candidate if it is a previous guess or it contains eliminated letters
-        new_guess = position_remover(guess_word, new_guess, temp);
+        /*This eliminates a candidate if it does not contain letters in the right position,
+            if it is a previous guess, or if it contains eliminated letters.*/
+        new_guess = position_remover(guess_word, new_guess, pos);
         new_guess = prev_guess_remover(previous_len, previous, new_guess, word_from_array);
-        new_guess = eliminated_letter_remover(temp, temp_comp, new_guess);
+        new_guess = eliminated_letter_remover(pos, pos_comp, new_guess);
     }
 
     return new_guess;
 }
 
-string best_word(int total, string word_array[], int nth)
+string best_word(int total_words, string word_array[], int nth)
 {
     /**********
     Entry key:
@@ -75,11 +78,11 @@ string best_word(int total, string word_array[], int nth)
     **********/
     
     string alphabet = "abcdefghijklmnopqrstuvwxyz";
-    float prob[26][6];                                  //first index counts the letter, second counts its position
-    float score[total];                                 //array that stores the score values
+    float prob[26][6];                              //first index counts the letter, second counts its position
+    float score[total_words];                             //array that stores the score values
     int count = 0;
 
-    for (int w=0; w<total; w++) 
+    for (int w=0; w<total_words; w++) 
     {
         score[w] = 0.;
     }
@@ -87,7 +90,7 @@ string best_word(int total, string word_array[], int nth)
     //This calculates the probabilities for each letter of the alphabet as a function of word position.
     for (int a=0; a<26; a++) for (int l=0; l<6; l++) 
     {
-        for (int w=0; w<total; w++) 
+        for (int w=0; w<total_words; w++) 
         {
             if (alphabet[a] == word_array[w][l])
             {
@@ -98,12 +101,12 @@ string best_word(int total, string word_array[], int nth)
                 continue;
             }
         }
-        prob[a][l] = (float)count/total;
+        prob[a][l] = (float)count/total_words;
         count = 0;
     }
 
     //This calculates the total score for each word
-    for (int w=0; w<total; w++) for (int l=0; l<6; l++) for (int a=0; a<26; a++) 
+    for (int w=0; w<total_words; w++) for (int l=0; l<6; l++) for (int a=0; a<26; a++) 
     {
 
         if (alphabet[a] == word_array[w][l])
@@ -121,51 +124,50 @@ string best_word(int total, string word_array[], int nth)
 
     }
 
-    int best_index = nth_best(total, score, nth);
+    int best_index = nth_best(total_words, score, nth);
     return word_array[best_index];
 }
 
-
-//FIXME
-string narrow_down(string guess_word, string hidden_word, string prev_guesses[], int prev_guess_len, int total, string all_words[]) 
+string narrow_down(string guess_word, string hidden_word, string prev_guesses[], int prev_guess_len, string pos_complement, int total_words, string all_words[]) 
 {
     /*
-    What this function does:
-    1. figure out which of the letters appear
-    2. generate a new guess list based on which letters are right
-        and which do appear
-    3. decide which is the best word from that guess list
-    4. compare the strings to determine how many letters are correct/appear
-    5. if the strings are equal, exit. If not, repeat the process.
+    Entry key:
+    1. the guess word for this round.
+    2. the hidden word.
+    3. an array containing all previous guesses.
+    4. the maximum number of rounds that can be played.
+    5. a string with all letters that have been eliminated.
+    6. the total number of words.
+    7. an array containing all acceptable words.
     */
     
    //finding the letters in correct positions, correct letters, and letters that have been eliminated.
-    string temp = letters_in_position(guess_word, hidden_word);
-    string in_word = letters_elsewhere(guess_word, hidden_word, temp);
-    string temp_complement = letters_in_position_comp(guess_word, hidden_word, in_word);
+    string pos = letters_in_position(guess_word, hidden_word);
+    string lets_in_word = letters_elsewhere(guess_word, hidden_word, pos);
+    pos_complement += letters_in_position_comp(guess_word, hidden_word, lets_in_word);
 
 
-    string new_guesses[total];
-    for (int i=0; i<total; i++)
+    string new_guesses[total_words];
+    for (int i=0; i<total_words; i++)
     {
         new_guesses[i] = "";
     }
 
     //gather the candidates, depending on if any letters are in the correct position
-    for (int w=0; w<total; w++) 
+    for (int w=0; w<total_words; w++) 
     {
-        if (temp == "00000")
+        if (pos == "00000")
         {
-            new_guesses[w] = new_guess_array(all_words[w], guess_word, in_word, temp, temp_complement, prev_guesses, prev_guess_len);
+            new_guesses[w] = new_guess_array(all_words[w], guess_word, lets_in_word, pos, pos_complement, prev_guesses, prev_guess_len);
         }
 
         else
         {
-            new_guesses[w] = new_guess_array(make_position_guesses(w, all_words, temp), guess_word, in_word, temp, temp_complement, prev_guesses, prev_guess_len);
+            new_guesses[w] = new_guess_array(make_position_guesses(w, all_words, pos), guess_word, lets_in_word, pos, pos_complement, prev_guesses, prev_guess_len);
         }
     }
 
     //finds the next best word to guess from the candidates, using the best_word function
-    string best_new_word = best_word(total, new_guesses, 1);
+    string best_new_word = best_word(total_words, new_guesses, 1);
     return best_new_word;
 }

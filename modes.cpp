@@ -1,3 +1,7 @@
+/*********
+ * This file containts the two functions on which each mode of operation is based.
+*********/
+
 #include "functions.cpp"
 
 void interactive(string start_word, int total, string all_words[])
@@ -24,11 +28,12 @@ void interactive(string start_word, int total, string all_words[])
     
     else if (debug == 1)
     {
-        hidden = "creed"; //use me for debugging
+        //here you can choose a specific word to use for debugging
+        hidden = "creed";
         cout << "Hidden: " << hidden << endl;
     }
 
-    int max_guess_num = 100;                //maximum rounds (to somewhat preserve memory)
+    int max_guess_num = 100;                //maximum number of rounds (to somewhat preserve memory)
     int round = 0;                          //number of times you've guessed
     string previous_guesses[max_guess_num]; //tracks previous guesses
 
@@ -48,8 +53,9 @@ void interactive(string start_word, int total, string all_words[])
     {
         string guess = start_word;
         string position;            //tracks which letters are in the right position
-        string position_complement; //tracks which letters have been eliminated
         string in_word = "";        //tracks which letters appear but aren't in the right position
+        string position_complement; //tracks which letters have been eliminated
+
         int num_suggestions = 5;    //how many suggestions the computer should give you at the end
         string new_guesses[total];  //array containing all the new candidates
 
@@ -65,11 +71,11 @@ void interactive(string start_word, int total, string all_words[])
             position = letters_in_position(guess, hidden);
             if (position != "00000") 
             {
-                cout << "---------\nThese letters are in the right position: " << position << endl;
+                cout << "These letters are in the right position: " << position << endl;
             }
             else
             {
-                cout << "---------\nNo letters were in the right position." << endl;
+                cout << "No letters were in the right position." << endl;
             }
 
             //calculates which letters are right but not in position
@@ -99,10 +105,15 @@ void interactive(string start_word, int total, string all_words[])
                 }
             }
 
-            //returns the letters that have been eliminated
+            //returns the letters that have been eliminated (for debugging)
             if (debug == 1) 
             {
-                print_position_complement(position_complement);
+                cout << "These letters have been eliminated: ";
+                for (int i=0; i<position_complement.length(); i++)
+                {
+                    cout << position_complement[i];
+                }
+                printf("\n");
             }
 
             //returns the next best n guesses
@@ -115,6 +126,7 @@ void interactive(string start_word, int total, string all_words[])
             //puts the current guess in the array of previous guesses
             previous_guesses[round] = guess;
 
+            //this puts information from the round into the debug file
             if (debug == 1)
             {
                 string best = best_word(total, new_guesses, 1);
@@ -140,9 +152,16 @@ void interactive(string start_word, int total, string all_words[])
     }
 }
 
-
 string independent(string hidden, int max_guesses, int total, string all_words[]) 
 {
+    /*
+    This program does the following:
+    1. makes an initial guess based on the best word algorithm
+    2. checks to see if the hidden word is the guess word
+    3. while the first guess is not the hidden word, a new guess is generated 
+        using the narrow_down function (see functions.cpp)
+    4. returns the number of rounds and the hidden word, once it is found.
+    */
     string guess = best_word(total, all_words, 1);
 
     //if computer guesses the hidden word right off
@@ -157,6 +176,7 @@ string independent(string hidden, int max_guesses, int total, string all_words[]
         int round_count = 0;
         string temp_guess;
         string previous[max_guesses];
+        string complement;
 
         for (int g=0; g<max_guesses; g++) 
         {
@@ -166,15 +186,16 @@ string independent(string hidden, int max_guesses, int total, string all_words[]
         while (guess != hidden)
         {
             previous[round_count] = guess;
-            temp_guess = narrow_down(guess, hidden, previous, max_guesses, total, all_words);
+            temp_guess = narrow_down(guess, hidden, previous, max_guesses, complement, total, all_words);
             guess = temp_guess;
-            round_count++;
 
             if(round_count >= max_guesses) 
             {
                 printf("Round count has exceeded ability for computer to remember past guesses. Exiting program.\n");
                 exit(EXIT_FAILURE);
             }
+
+            round_count++;
         }
 
         cout << "Number of rounds: " << round_count << endl;

@@ -2,6 +2,7 @@
 A c++ program which solves the Wordle independently and interactively.
 Created December 2022 by Ericka Florio
 For the purpose of assessment in the Michaelmas 2022 Research in Computing course.
+tester line
 **********/
 
 //#include "header.hpp"

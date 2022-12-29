@@ -43,6 +43,11 @@ of the ranking algorithm significantly.
 
 ## Structure of testing protocol ##
 
+Remaining tasks:
+1. integrate with Docker
+2. finish all the documentation (README and repo description mainly)
+3. write 3,000 word report
+
 Future improvements:
 1. Make the all_words and total vars global -- will need to check that these 
 are never altered by the program, but should improve speeds by a lot in 

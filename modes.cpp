@@ -96,12 +96,12 @@ void interactive(string start_word, int total, string all_words[])
             {
                 if (position == "00000") 
                 {
-                    new_guesses[w] = new_guess_array(all_words[w], guess, in_word, position, position_complement, previous_guesses, max_guess_num);
+                    new_guesses[w] = new_guess_array(guess, all_words[w], position, in_word, position_complement, previous_guesses, max_guess_num);
                 }
 
                 else 
                 {
-                    new_guesses[w] = new_guess_array(make_position_guesses(w, all_words, position), guess, in_word, position, position_complement, previous_guesses, max_guess_num);
+                    new_guesses[w] = new_guess_array(guess, make_position_guesses(w, position, all_words), position, in_word, position_complement, previous_guesses, max_guess_num);
                 }
             }
 
@@ -120,7 +120,7 @@ void interactive(string start_word, int total, string all_words[])
             cout << "The next " << num_suggestions << " best words to try are: " << endl;
             for (int s=1; s<num_suggestions+1; s++) 
             {
-                cout << best_word(total, new_guesses, s) << endl;
+                cout << best_word(s, total, new_guesses) << endl;
             }
 
             //puts the current guess in the array of previous guesses
@@ -129,7 +129,7 @@ void interactive(string start_word, int total, string all_words[])
             //this puts information from the round into the debug file
             if (debug == 1)
             {
-                string best = best_word(total, new_guesses, 1);
+                string best = best_word(1, total, new_guesses);
                 print_to_debug_file(round, guess, hidden, position, in_word, position_complement, best);
                 fprintf(debug_out, "\n\n");
             }
@@ -162,7 +162,7 @@ string independent(string hidden, int max_guesses, int total, string all_words[]
         using the narrow_down function (see functions.cpp)
     4. returns the number of rounds and the hidden word, once it is found.
     */
-    string guess = best_word(total, all_words, 1);
+    string guess = best_word(1, total, all_words);
 
     //if computer guesses the hidden word right off
     if (guess == hidden)
@@ -186,7 +186,7 @@ string independent(string hidden, int max_guesses, int total, string all_words[]
         while (guess != hidden)
         {
             previous[round_count] = guess;
-            temp_guess = narrow_down(guess, hidden, previous, max_guesses, complement, total, all_words);
+            temp_guess = narrow_down(guess, hidden, complement, max_guesses, previous, total, all_words);
             guess = temp_guess;
 
             if(round_count >= max_guesses) 

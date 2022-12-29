@@ -52,5 +52,5 @@ various functions.
 For cleanup:
 1. DONE make sure general style is ok and all functions have descriptions.
 2. DONE make sure variable names make sense and aren't duplicated in sub-functions.
-3. make sure variable entry into functions follows a consistent format.
-4. 
+3. DONE make sure variable entry into functions follows a consistent format.
+4. fix the makefile so it does all the things you want it to do

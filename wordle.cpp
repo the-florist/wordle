@@ -59,7 +59,7 @@ int main()
         //main body for interactive mode
         else if (typ == 1) 
         {
-            string best = best_word(tot, words, 1);
+            string best = best_word(1, tot, words);
             
             int strt;
             string start;

@@ -1,3 +1,8 @@
+/*********
+ * This file containts all tests which must be passed in order for 
+ * a new version of the code to upload successfully onto github.
+*********/
+
 #include "../modes.cpp"
 
 int main() 

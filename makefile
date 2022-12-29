@@ -2,18 +2,17 @@
 #FILES = functions.cpp
 NAME = -o wordle
 COMPILER = g++-12
-TESTFILE = -o tests
+TESTFILE = -o ./tools/tests
 
 clean:
-	rm wordle
-	rm ./tools/debug_output.txt
+	@rm wordle
+	@rm ./tools/debug_output.txt
 
 test:
-	cd ./tools/
-	$(COMPILER) $(TESTFILE) tests.cpp
-	./tests
-	echo "Tests run, exiting program."
-	rm tests
+	$(COMPILER) $(TESTFILE) ./tools/tests.cpp
+	@./tools/tests
+	@echo "Tests run, exiting program."
+	@rm ./tools/tests
 
-make:
-	$(COMPILER) $(NAME) wordle.cpp
+main:
+	@$(COMPILER) $(NAME) wordle.cpp

@@ -41,16 +41,9 @@ of the ranking algorithm significantly.
 
 ## Debugging functionality ##
 
-To address with interact debugging:
-1. in_word is fixed! Now just doing some more random tests...
+## Structure of testing protocol ##
 
 Future improvements:
 1. Make the all_words and total vars global -- will need to check that these 
 are never altered by the program, but should improve speeds by a lot in 
 various functions.
-
-For cleanup:
-1. DONE make sure general style is ok and all functions have descriptions.
-2. DONE make sure variable names make sense and aren't duplicated in sub-functions.
-3. DONE make sure variable entry into functions follows a consistent format.
-4. fix the makefile so it does all the things you want it to do

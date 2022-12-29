@@ -41,28 +41,33 @@ string find_unique_letters(string to_compress)
     */
     string shortn = "";
     int len = to_compress.length();
+    int doubled;
 
-    for (int s=0; s<len; s++) 
+    for (int l=0; l<len; l++)
     {
-        shortn += zero[0];
-    }
-
-    for (int l=0; l<len; l++) 
-    {
-        shortn[l] = to_compress[l];
-
-        for (int ll=0; ll<l; ll++)
+        doubled = 0;
+        for (int ll=0; ll<l; ll++) 
         {
-            if (shortn[l] == shortn[ll])
+            if (to_compress[l] == shortn[ll] && l != ll)
             {
-                shortn[l] = zero[1];        //this is the "empty" string character
+                doubled++;
             }
-            else 
+            else
             {
                 continue;
             }
         }
+        
+        if (doubled == 0) 
+        {
+            shortn += to_compress[l];
+        }
+        else 
+        {
+            continue;
+        }
     }
+
     return shortn;
 }
 

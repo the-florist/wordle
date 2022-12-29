@@ -4,8 +4,8 @@ COMPILER = g++-12
 TESTFILE = -o ./tools/tests
 
 clean:
-	@rm wordle
-	@rm ./tools/debug_output.txt
+	@if [[ -e wordle ]]; then rm wordle; fi
+	@if [[ -e ./tools/debug_output.txt ]]; then rm ./tools/debug_output.txt; fi
 
 test:
 	@$(COMPILER) $(TESTFILE) ./tools/tests.cpp
@@ -17,5 +17,5 @@ main:
 	@$(COMPILER) $(NAME) wordle.cpp
 
 run:
-	@make main
+	@if [[ !(-e wordle) ]]; then make main; fi
 	@./wordle

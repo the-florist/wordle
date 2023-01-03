@@ -1,6 +1,6 @@
 #!/bin/bash
 NAME = -o wordle
-COMPILER = g++-12
+COMPILER = g++
 TESTFILE = -o ./tools/tests
 
 clean:

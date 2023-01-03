@@ -3,7 +3,6 @@
 #include <iostream> //fopen, etc.
 #include <cstdlib>  //rand and srand
 #include <string>   //string type format and functions (very important!!)
-//#include <vector>
 #include <ctime>    //used for random number seed
 
 using namespace std;

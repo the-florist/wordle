@@ -3,22 +3,49 @@
 The purpose of this program is to solve the wordle, in both
 an independent and interactive format. In independent mode, the 
 user provides a word for the computer to guess, and the computer 
-will use (----- analysis) to guess the word. In interactive mode,
-the computer will generate a hidden word and the user will have to 
-guess the word. In this mode, the user can either supply their own 
-first word, or they can use a good first word recommended by the 
-computer.
+will use a ranking algorithm to guess the word (see the "best start" 
+function below). In interactive mode, the computer will generate 
+a hidden word and the user will guess the word. In this mode, 
+the user can either supply their own first word, or they can use a 
+good first word recommended by the computer. The computer will 
+also provide a list of the next "best guesses" using the ranking 
+algorithm to help the user out (currently the computer provides 
+5 of these hints, but this number can be easily changed. See line 
+59 in modes.cpp).
 
-This program is written in three main sections. First the program sets 
-all of the variables and arrays that it will need at the start, and scans 
-in the complete list of acceptable wordle words. Then the program asks the 
-user which mode they would like to play in. Then the user will enter one 
-of two subroutines:
+This program is written in tree format, with four main files where 
+most of the computation is performed.
+* wordle.cpp: this file controls the mode chosen by the user and calls 
+the functions associated with each mode.
+* modes.cpp: this file contains the function definitions for the two main 
+modes, sets the overall variables that those functions rely on and loops over  
+the most important sub-functions, which do the bulk of the calculating and 
+ranking work.
+* functions.cpp: this file contains all of the most important functions 
+that modes.cpp relies upon, including the "best start" algorithm that 
+ranks the utility of guesses and the routines which compare the current 
+guess to the hidden word.
+* subroutines.cpp: this file contains all of the small functions that 
+functions.cpp relies upon. All of the functions in this file are independent 
+of the other files. It is here, and here only, that header.cpp is included (to 
+avoid double declarations). In this file you can find many of the debugging tools 
+I've written (see "debugging functionality" below) as well as functions that 
+return comparisons between the hidden word and the guess word, and 
+functions that eliminate candidate "best words" based on the information 
+in current and previous guesses.
 
-1. Independent. Here, the user will first enter a word for the computer to 
-guess ---
+There are a few important auxiliary files as well.
+* header.cpp: this file contains all imported c++ standard header files 
+as well as all global variables.
+* tools/tests.cpp: this contains all testing routines that are run 
+before commits to this program can be pushed to Github, by testing the  
+output from most of the functions in subroutines.cpp for consistency.
 
-2. Interactive. Here, 
+Below, I describe how some of the most important functions in this code work. 
+If you have any questions/comments/bug reports, please reach out to me 
+via Github or at eaf49@cam.ac.uk. Good luck!
+
+## A run in interactive mode ##
 
 ## The "best start" function ##
 
@@ -44,7 +71,11 @@ of the ranking algorithm significantly.
 ## Structure of testing protocol ##
 
 ## Docker use and contents ##
+### OS requirements ###
 
+## Future improvements and known bugs ##
+
+## Notes to self ##
 Remaining tasks:
 
 2. finish all the documentation (README and repo description mainly)

@@ -24,7 +24,7 @@ string new_guess_array(string guess_word, string word_from_array, string pos, st
     7. the maximum number of rounds.
     */
 
-    string new_guess = "";          //candidates
+    string new_guess = "";                    //candidates
     string lets_in_word_temp = lets_in_word;  //letters in the word, which can be altered in the function
 
     //this counts the number of floating letters in the candidate

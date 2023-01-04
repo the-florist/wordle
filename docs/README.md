@@ -243,3 +243,10 @@ or suspect that one of these bugs may point to a larger issue with this
 program, please reach out to me using the contact details provided above.
 
 Enjoy!
+
+### Resources ###
+
+I used advice from the following websites to help me build the Docker 
+environment using the apk function: 
+1. https://stackoverflow.com/questions/58392792/how-to-download-git-only-on-docker
+2. https://wiki.alpinelinux.org/wiki/GCC 

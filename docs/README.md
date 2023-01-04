@@ -156,32 +156,90 @@ for instance, if you would like to run a specific function but skip the
 intro messages, etc., then you can alter lines 18-32 in wordle.cpp to turn off 
 the *run_main* flag.
 
-## Structure of testing protocol ##
+## Structure of the testing protocol ##
 
+The testing protocol laid out in tools/tests.cpp represents a set of 
+conditions that this program must pass before it can be pushed onto the 
+public git repository. The tests file examines most of the functions in 
+the subroutines.cpp file, focusing on those which do the heart of the 
+calculation of the program and skipping those which directly interact with 
+external files that may not exist (such as *print_to_debug_file*) or which 
+print to the terminal (such as *print_string_list*).
 
+All of the tests involve comparing the output of a function to the value 
+that it must return for the program's logic to work. To do this it gives 
+sample hidden and guess words to each function -- the word choice here 
+is not significant, but the words have been chosen to produce the expected 
+outcome in the program. Both empty returns (for instance, the combination 
+of "boats" and "growl" for the *letters_in_position* function giving "00000") 
+and partially filled returns (such as the combination in the same function of 
+"bools" and "growl" giving "00o00") have been tested. If a function passes 
+it's tests, a message will print to the screen showing this result. If a 
+function fails a test, the program exits and a message is printed to the screen 
+giving the name of the function that failed and a number indicating which 
+condition the function failed.
+
+If you decide to alter the testing protocol, __please do so very carefully__. 
+The protocol is currently constructed to test each function properly, and 
+altering these routines may produce errors where none exist.
 
 ## Docker use and contents ##
-### OS requirements ###
+
+This program is primarily built using the standard c++ library and 
+functions, so any device which can read this language should be able 
+to run the program. However, if you are working on a device with an 
+unfamiliar OS or cannot get the code to compile, I've included a Dockerfile 
+in tools/ which can be used to create a virtual environment from which 
+this program should run. 
+
+Currently the Docker file sets up the most basic Alpine Linux system with 
+vim, git and gcc added in. To use this Docker file, you must first build 
+the docker system by navigating to the wordle/ directory and running:
+
+$ docker build -t alpine_main . 
+
+This will create an image, which can be activated using the command: 
+
+$ docker run --rm -ti alpine_main
+
+which will generate a detached terminal accessible via command line input. 
+The Dockerfile as currently configured will drop the user into the home/ directory, 
+where the wordle/ directory has been cloned off of github. To run the program, 
+change into this wordle/ directory *first*, then run the program as described above. 
+Note that once you exit this environment, it will be deleted, so if there are any 
+changes you wish to save, do push them to the github before exiting the environment!
 
 ## Future improvements and known bugs ##
 
-Known bugs:
-1. Round count
-2. Printing of debug info
-3. Repeating best words at end of round
+To improve this code in the future, I am looking to alter 
+the structure so as to make the *words[]* and *tot* variables global -- 
+this way, all functions can access these variables once they are set, 
+and the program does not need to call on them in every instance of a 
+function which needs them (which is most of the functions). In addition 
+I am considering changing the ranking algorithm to better match 
+how humans tend to play the game, such as weighing a word according to 
+the diversity of letters it contains and the relativy commonality of 
+those letters.
 
-## Notes to self ##
-Remaining tasks:
+There are also a few bugs of which I am currently aware of. The first 
+is that the "round count" variable, which counts how many iterations 
+are needed to determine the hidden word in independent mode, often returns 
+very low numbers, lower than one may expect from similar games played in 
+interactive mode. It is possible that this variable is working as 
+expected (and the computer is just very fast), but I do suspect this 
+counter is not iterating correctly, or not iterating on every round.
 
-2. finish all the documentation (README and repo description mainly)
-3. write 3,000 word report
+In addition, I have had issues opening the debug output file in some editors 
+as the *position_complement* variable can sometimes contain non-standard 
+characters. If you run into this problem, consider opening the debug output 
+file using a simple text editor, making notes of which characters can be ignored. 
+Finally, in the last few rounds of interactive mode, when there are less than 5 best 
+words remaining, the program will print the least best of these words multiple times. 
+Again I am not sure what is causing this issue, but it seems to affect merely 
+how the program looks in the terminal, and not it's overall performance.
 
-Future improvements:
-1. Make the all_words and total vars global -- will need to check that these 
-are never altered by the program, but should improve speeds by a lot in 
-various functions.
+If you find any bugs (particularly more serious ones) in addition to these, 
+or suspect that one of these bugs may point to a larger issue with this 
+program, please reach out to me using the contact details provided above.
 
-Bugs:
-1. Sometimes the word suggestion algorithm prints multiple of the next word 
-if you've narrowed it down to less than five words... not sure why it started 
-doing this...
+Enjoy!

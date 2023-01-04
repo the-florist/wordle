@@ -47,7 +47,12 @@ via Github or at eaf49@cam.ac.uk. Good luck!
 
 ## To run the program ##
 
-
+This program is run off of the makefile that I've included in the main folder. 
+To compile and run the program, nagivate to the "wordle" directory and run "make 
+run." If you would like to simply compile the code, run "make main." If you would 
+like to clean up the directory (of old executibles, etc.) run "make clean," and 
+if you would like to run tests locally, run "make test." You may also compile and run 
+the program in the standard way using the wordle.cpp file as the main file.
 
 ## A run in interactive mode ##
 
@@ -118,33 +123,52 @@ the user exceeds the number of allowed rounds.
 ## The "best word" function ##
 
 The "best word" function, found in functions.cpp, is used throughout the 
-program to rank words from an array of strings.
+program to rank words from an array of strings. The function adds up the number 
+of times each letter in the alphabet shows up in each position (1-5) for 
+a given word, then divides this number (calculated for each position) 
+by the total number of words. This gives a sort of "probability measure" 
+for how likely a given letter is likely to appear in a given position 
+in the word. The program then determines a given word's "score" by adding 
+up the probability values for each letter in the word, for that position. 
+The word with the highest score is said to be in some sense the "best" 
+word of the array.
 
-This function takes the list of all possible words and decides 
-which one is the best word to start the game off with. To do this, 
-it counts how many times each letter of the alphabet shows up in 
-each position of the word, and divides by the total number of words, 
-giving a rough "likelyhood" of each letter showing up in each location.
-
-The program then takes each word and adds up this probability value for 
-each letter which appears in the word. This total score is then used to 
-rank words for their "generality", i.e. the likelyhood that the letters 
-appearing in the word will appear in that place in a randomly generated 
-word. This word is then given as the best option to start with.
-
-IMPORTANT: This function ranks words based on how common their individual 
+Note, however, that this function ranks words based on how common their individual 
 letters are, *not* how common the word itself is. I don't currently have 
 the data to add this feature but I suspect it would improve the accuracy 
-of the ranking algorithm significantly.
+of the ranking algorithm significantly. In addition, this algorithm values 
+accuracy over diversity i.e. it does not select for words that have unique 
+letters, which may give the user more information from which to make future guesses.
 
 ## Debugging functionality ##
 
+I have added many of the most common features I used to debug this program 
+in as options during writing and debugging. To turn on all of the debugging 
+options, set the *debug* global flag in header.cpp to 1. This will, for 
+instance, print the complement for each round to the terminal, and allow 
+the programmer to specify their own hidden word (which I found particularly 
+useful while learning how to calculate *position*, *in_word*, etc.). Turning 
+on the debug flag will also generate a text file at the end of the run, stored 
+in the tools/ directory, which will contain all of the information gathered by 
+the program during every run. There also exists a separate flag which can 
+control whether the main, interactive bulk of the program is run -- so 
+for instance, if you would like to run a specific function but skip the 
+intro messages, etc., then you can alter lines 18-32 in wordle.cpp to turn off 
+the *run_main* flag.
+
 ## Structure of testing protocol ##
+
+
 
 ## Docker use and contents ##
 ### OS requirements ###
 
 ## Future improvements and known bugs ##
+
+Known bugs:
+1. Round count
+2. Printing of debug info
+3. Repeating best words at end of round
 
 ## Notes to self ##
 Remaining tasks:
